@@ -75,7 +75,7 @@ The app will automatically check for updates on startup and notify you when a ne
 - **Error Handling** - Graceful error recovery with retry functionality
 - **Persistent Settings** - Remembers your window size, position, zoom level, and preferences
 - **Auto-Updates** - Automatically downloads updates and installs on restart
-- **Logging** - Detailed logs for troubleshooting (stored in app data folder)
+- **Logging** - Detailed logs for troubleshooting with quick access button in settings
 
 ## Keyboard Shortcuts
 
@@ -100,8 +100,9 @@ The app will automatically check for updates on startup and notify you when a ne
 
 ### Logs Location
 
-The app uses `electron-log` to store detailed logs for debugging:
+The app uses `electron-log` to store detailed logs for debugging. You can quickly access the logs folder by clicking the document icon in the Settings modal.
 
+**Log file locations:**
 - **Windows:** `%USERPROFILE%\AppData\Roaming\Chess Desktop App\logs\`
 - **macOS:** `~/Library/Logs/Chess Desktop App/`
 - **Linux:** `~/.config/Chess Desktop App/logs/`
