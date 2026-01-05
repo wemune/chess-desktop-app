@@ -36,7 +36,7 @@ A modern desktop application for Chess.com with native features and keyboard sho
 **Important:** Since this app is not code-signed, macOS will block it by default.
 
 1. Download the appropriate DMG for your Mac:
-   - **Apple Silicon** (M1/M2/M3): `Chess-Desktop-App-arm64.dmg`
+   - **Apple Silicon** (M-series): `Chess-Desktop-App-arm64.dmg`
    - **Intel**: `Chess-Desktop-App-x64.dmg`
 2. Open the DMG and drag the app to Applications
 3. Open Terminal and run:
@@ -141,7 +141,3 @@ This project is open source software. Chess.com and its logo are trademarks of C
 - **General inquiries:** [contact@chessdesktop.app](mailto:contact@chessdesktop.app)
 - **Issues & bugs:** [Open an issue](../../issues) on GitHub
 - **Copyright/takedown requests:** [contact@chessdesktop.app](mailto:contact@chessdesktop.app)
-
----
-
-**Note:** This application requires an active internet connection to access Chess.com.
