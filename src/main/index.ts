@@ -8,6 +8,9 @@ import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '..
 import { IPC_CHANNELS } from '../shared/ipc-channels'
 import { CHESS_SELECTORS, buildHideCSS } from '../shared/chess-selectors'
 
+log.transports.file.level = process.env.NODE_ENV === 'development' ? 'debug' : 'info'
+log.transports.console.level = process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
+
 if (process.platform === 'win32') {
   app.setAppUserModelId('Chess Desktop App')
 }
