@@ -11,6 +11,7 @@ export interface WindowConfig {
 export interface StoreSchema {
   window: WindowConfig
   zoomLevel: number
+  notificationsEnabled: boolean
 }
 
 const defaults: StoreSchema = {
@@ -19,7 +20,8 @@ const defaults: StoreSchema = {
     height: 800,
     isMaximized: false
   },
-  zoomLevel: 0
+  zoomLevel: 0,
+  notificationsEnabled: true
 }
 
 export const store = new Store<StoreSchema>({ defaults })

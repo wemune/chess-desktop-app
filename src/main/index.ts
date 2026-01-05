@@ -189,8 +189,14 @@ app.on('web-contents-created', (_event, contents) => {
 
     contents.session.setPermissionRequestHandler((webContents, permission, callback) => {
       if (permission === 'notifications' && isChessDotComURL(webContents.getURL())) {
-        log.info('Granting notification permission to chess.com')
-        callback(true)
+        const notificationsEnabled = store.get('notificationsEnabled')
+        if (notificationsEnabled) {
+          log.info('Granting notification permission to chess.com')
+          callback(true)
+        } else {
+          log.info('Denying notification permission (disabled in settings)')
+          callback(false)
+        }
       } else {
         log.warn('Denying permission request:', permission)
         callback(false)

@@ -58,6 +58,15 @@ export function registerIpcHandlers(): void {
         log.warn('Invalid window settings received:', settings.window)
       }
     }
+
+    if (settings.notificationsEnabled !== undefined) {
+      if (typeof settings.notificationsEnabled === 'boolean') {
+        store.set('notificationsEnabled', settings.notificationsEnabled)
+        log.info('Notifications setting updated:', settings.notificationsEnabled)
+      } else {
+        log.warn('Invalid notificationsEnabled setting received:', settings.notificationsEnabled)
+      }
+    }
   })
 
   ipcMain.handle('platform:get', (): NodeJS.Platform => {
