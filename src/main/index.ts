@@ -23,7 +23,8 @@ const getUserAgent = (): string => {
 const isChessDotComURL = (url: string): boolean => {
   try {
     const urlObj = new URL(url)
-    return urlObj.hostname === 'www.chess.com' || urlObj.hostname === 'chess.com'
+    const validHostname = urlObj.hostname === 'www.chess.com' || urlObj.hostname === 'chess.com'
+    return validHostname && urlObj.protocol === 'https:'
   } catch {
     return false
   }
