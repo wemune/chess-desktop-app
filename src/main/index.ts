@@ -65,7 +65,8 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.mjs'),
       webviewTag: true,
       contextIsolation: true,
-      sandbox: false
+      sandbox: false,
+      devTools: process.env.NODE_ENV === 'development'
     }
   })
 
@@ -99,12 +100,6 @@ function createWindow(): void {
     mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-
-    mainWindow.webContents.on('before-input-event', (event, input) => {
-      if (input.type === 'keyDown' && (input.key === 'F12' || (input.control && input.shift && input.key === 'I'))) {
-        event.preventDefault()
-      }
-    })
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
