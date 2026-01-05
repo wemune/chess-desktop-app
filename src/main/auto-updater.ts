@@ -1,6 +1,7 @@
 import { BrowserWindow } from 'electron'
 import pkg from 'electron-updater'
 import log from 'electron-log'
+import { IPC_CHANNELS } from '../shared/ipc-channels'
 
 const { autoUpdater } = pkg
 
@@ -24,7 +25,7 @@ export function initAutoUpdater(): void {
 
   autoUpdater.on('update-available', (info) => {
     log.info('Update available:', info.version)
-    mainWindow?.webContents.send('update:available', {
+    mainWindow?.webContents.send(IPC_CHANNELS.UPDATE.AVAILABLE, {
       version: info.version,
       releaseNotes: info.releaseNotes,
       releaseDate: info.releaseDate
@@ -40,7 +41,7 @@ export function initAutoUpdater(): void {
   })
 
   autoUpdater.on('download-progress', (progress) => {
-    mainWindow?.webContents.send('update:download-progress', {
+    mainWindow?.webContents.send(IPC_CHANNELS.UPDATE.DOWNLOAD_PROGRESS, {
       percent: progress.percent,
       transferred: progress.transferred,
       total: progress.total
@@ -49,7 +50,7 @@ export function initAutoUpdater(): void {
 
   autoUpdater.on('update-downloaded', () => {
     log.info('Update downloaded')
-    mainWindow?.webContents.send('update:downloaded')
+    mainWindow?.webContents.send(IPC_CHANNELS.UPDATE.DOWNLOADED)
   })
 
   setTimeout(() => {

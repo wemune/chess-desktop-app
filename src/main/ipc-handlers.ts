@@ -3,6 +3,7 @@ import { store, StoreSchema } from './store'
 import { downloadUpdate, installUpdate } from './auto-updater'
 import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
+import { IPC_CHANNELS } from '../shared/ipc-channels'
 
 let chessWebContents: WebContents | null = null
 
@@ -11,12 +12,12 @@ export function setChessWebContents(webContents: WebContents): void {
 }
 
 export function registerIpcHandlers(): void {
-  ipcMain.on('window:minimize', (event) => {
+  ipcMain.on(IPC_CHANNELS.WINDOW.MINIMIZE, (event) => {
     const win = BrowserWindow.fromWebContents(event.sender)
     win?.minimize()
   })
 
-  ipcMain.on('window:maximize', (event) => {
+  ipcMain.on(IPC_CHANNELS.WINDOW.MAXIMIZE, (event) => {
     const win = BrowserWindow.fromWebContents(event.sender)
     if (win) {
       if (win.isMaximized()) {
@@ -27,21 +28,21 @@ export function registerIpcHandlers(): void {
     }
   })
 
-  ipcMain.on('window:close', (event) => {
+  ipcMain.on(IPC_CHANNELS.WINDOW.CLOSE, (event) => {
     const win = BrowserWindow.fromWebContents(event.sender)
     win?.close()
   })
 
-  ipcMain.handle('window:is-maximized', (event): boolean => {
+  ipcMain.handle(IPC_CHANNELS.WINDOW.IS_MAXIMIZED, (event): boolean => {
     const win = BrowserWindow.fromWebContents(event.sender)
     return win?.isMaximized() ?? false
   })
 
-  ipcMain.handle('settings:get', (): StoreSchema => {
+  ipcMain.handle(IPC_CHANNELS.SETTINGS.GET, (): StoreSchema => {
     return store.store
   })
 
-  ipcMain.on('settings:set', (_event, settings: Partial<StoreSchema>) => {
+  ipcMain.on(IPC_CHANNELS.SETTINGS.SET, (_event, settings: Partial<StoreSchema>) => {
     if (settings.window) {
       const { width, height, x, y, isMaximized } = settings.window
       if (
@@ -86,11 +87,11 @@ export function registerIpcHandlers(): void {
     }
   })
 
-  ipcMain.handle('platform:get', (): NodeJS.Platform => {
+  ipcMain.handle(IPC_CHANNELS.PLATFORM.GET, (): NodeJS.Platform => {
     return process.platform
   })
 
-  ipcMain.on('webview:go-back', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.GO_BACK, () => {
     if (!chessWebContents) {
       log.warn('webview:go-back called but chessWebContents is null')
       return
@@ -100,7 +101,7 @@ export function registerIpcHandlers(): void {
     }
   })
 
-  ipcMain.on('webview:go-forward', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.GO_FORWARD, () => {
     if (!chessWebContents) {
       log.warn('webview:go-forward called but chessWebContents is null')
       return
@@ -110,15 +111,15 @@ export function registerIpcHandlers(): void {
     }
   })
 
-  ipcMain.handle('webview:can-go-back', (): boolean => {
+  ipcMain.handle(IPC_CHANNELS.WEBVIEW.CAN_GO_BACK, (): boolean => {
     return chessWebContents?.navigationHistory.canGoBack() ?? false
   })
 
-  ipcMain.handle('webview:can-go-forward', (): boolean => {
+  ipcMain.handle(IPC_CHANNELS.WEBVIEW.CAN_GO_FORWARD, (): boolean => {
     return chessWebContents?.navigationHistory.canGoForward() ?? false
   })
 
-  ipcMain.on('webview:reload', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.RELOAD, () => {
     if (!chessWebContents) {
       log.warn('webview:reload called but chessWebContents is null')
       return
@@ -126,7 +127,7 @@ export function registerIpcHandlers(): void {
     chessWebContents.reload()
   })
 
-  ipcMain.on('webview:zoom-in', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.ZOOM_IN, () => {
     if (!chessWebContents) {
       log.warn('webview:zoom-in called but chessWebContents is null')
       return
@@ -139,7 +140,7 @@ export function registerIpcHandlers(): void {
     store.set('zoomLevel', newZoom)
   })
 
-  ipcMain.on('webview:zoom-out', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.ZOOM_OUT, () => {
     if (!chessWebContents) {
       log.warn('webview:zoom-out called but chessWebContents is null')
       return
@@ -152,7 +153,7 @@ export function registerIpcHandlers(): void {
     store.set('zoomLevel', newZoom)
   })
 
-  ipcMain.on('webview:zoom-reset', () => {
+  ipcMain.on(IPC_CHANNELS.WEBVIEW.ZOOM_RESET, () => {
     if (!chessWebContents) {
       log.warn('webview:zoom-reset called but chessWebContents is null')
       return
@@ -161,15 +162,15 @@ export function registerIpcHandlers(): void {
     store.set('zoomLevel', 0)
   })
 
-  ipcMain.handle('webview:get-zoom', (): number => {
+  ipcMain.handle(IPC_CHANNELS.WEBVIEW.GET_ZOOM, (): number => {
     return chessWebContents?.getZoomLevel() ?? 0
   })
 
-  ipcMain.on('update:download', () => {
+  ipcMain.on(IPC_CHANNELS.UPDATE.DOWNLOAD, () => {
     downloadUpdate()
   })
 
-  ipcMain.on('update:install', () => {
+  ipcMain.on(IPC_CHANNELS.UPDATE.INSTALL, () => {
     installUpdate()
   })
 }

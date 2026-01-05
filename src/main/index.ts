@@ -5,6 +5,7 @@ import { registerIpcHandlers, setChessWebContents } from './ipc-handlers'
 import { initAutoUpdater, setMainWindow } from './auto-updater'
 import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
+import { IPC_CHANNELS } from '../shared/ipc-channels'
 
 if (process.platform === 'win32') {
   app.setAppUserModelId('Chess Desktop App')
@@ -84,11 +85,11 @@ function createWindow(): void {
   }
 
   mainWindow.on('maximize', () => {
-    mainWindow?.webContents.send('window:maximize-change', true)
+    mainWindow?.webContents.send(IPC_CHANNELS.WINDOW.MAXIMIZE_CHANGE, true)
   })
 
   mainWindow.on('unmaximize', () => {
-    mainWindow?.webContents.send('window:maximize-change', false)
+    mainWindow?.webContents.send(IPC_CHANNELS.WINDOW.MAXIMIZE_CHANGE, false)
   })
 
   mainWindow.on('close', () => {
@@ -232,11 +233,11 @@ app.on('web-contents-created', (_event, contents) => {
     })
 
     contents.on('did-start-loading', () => {
-      mainWindow?.webContents.send('webview:load-start')
+      mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_START)
     })
 
     contents.on('did-stop-loading', () => {
-      mainWindow?.webContents.send('webview:load-stop')
+      mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_STOP)
 
       const chatEnabled = store.get('chatEnabled')
       if (!chatEnabled) {
@@ -248,7 +249,7 @@ app.on('web-contents-created', (_event, contents) => {
 
     contents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
       if (errorCode !== -3) {
-        mainWindow?.webContents.send('webview:load-error', { errorCode, errorDescription, validatedURL })
+        mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_ERROR, { errorCode, errorDescription, validatedURL })
       }
     })
   }
