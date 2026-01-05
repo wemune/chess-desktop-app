@@ -1,0 +1,131 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  position: relative;
+  background-color: #312e2b;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.modal-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #999;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #b3b3b3;
+}
+
+.setting-group select {
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background-color: #272522;
+  color: #e0e0e0;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.setting-group select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.setting-group select:focus {
+  border-color: #81b64c;
+}
+
+.setting-group select option {
+  background-color: #272522;
+  color: #e0e0e0;
+  padding: 8px;
+}
+
+.coming-soon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 16px;
+  text-align: center;
+}

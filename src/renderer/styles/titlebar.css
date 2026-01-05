@@ -1,0 +1,319 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: #312e2b;
+}
+
+.update-banner {
+  background: linear-gradient(135deg, #81b64c 0%, #9acc5f 100%);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+}
+
+.update-banner.hidden {
+  display: none;
+}
+
+.update-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.update-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.update-btn {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.update-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.update-btn-text {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.15s ease;
+}
+
+.update-btn-text:hover {
+  opacity: 1;
+}
+
+.update-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.update-progress.hidden {
+  display: none;
+}
+
+.update-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.update-progress-bar {
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.update-progress-fill {
+  height: 100%;
+  background-color: white;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+#titlebar {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  background-color: #272522;
+  color: #b3b3b3;
+  user-select: none;
+  position: relative;
+  z-index: 1000;
+}
+
+.titlebar-drag-region {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-app-region: drag;
+}
+
+.loading-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #81b64c 0%, #a0d468 100%);
+  width: 0%;
+  transition: width 0.3s ease;
+  z-index: 2;
+}
+
+.loading-bar.hidden {
+  display: none;
+}
+
+.loading-bar.loading {
+  animation: loadingProgress 2s ease-in-out infinite;
+}
+
+@keyframes loadingProgress {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+.titlebar-nav {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  pointer-events: none;
+}
+
+.titlebar-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.titlebar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar-btn.close-btn:hover {
+  background-color: #e81123;
+  color: white;
+}
+
+.titlebar-btn svg {
+  pointer-events: none;
+}
+
+.nav-btn {
+  width: 36px;
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: transparent !important;
+}
+
+.zoom-btn {
+  width: 36px;
+}
+
+.zoom-level {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #999;
+  min-width: 45px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.zoom-level:hover {
+  color: #b3b3b3;
+}
+
+#settings-btn {
+  margin-right: 8px;
+  margin-left: 4px;
+}
+
+body.platform-darwin .window-control {
+  display: none;
+}
+
+body.platform-darwin #titlebar {
+  padding-left: 90px;
+}
+
+body.platform-darwin .titlebar-nav {
+  margin-left: 0;
+}
+
+body.platform-darwin #settings-btn {
+  margin-right: 0;
+}
+
+#chess-webview {
+  width: 100%;
+  height: calc(100% - 38px);
+  border: none;
+}
+
+body.update-visible #chess-webview {
+  height: calc(100% - 38px - 60px);
+}
+
+.error-overlay {
+  position: fixed;
+  top: 38px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #312e2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.error-overlay.hidden {
+  display: none;
+}
+
+.error-content {
+  text-align: center;
+  padding: 40px;
+  max-width: 500px;
+}
+
+.error-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #e0e0e0;
+  margin-bottom: 12px;
+}
+
+.error-content p {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.error-btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #81b64c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.error-btn:hover {
+  background-color: #9acc5f;
+}

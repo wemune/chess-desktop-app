@@ -1,0 +1,43 @@
+{
+  "name": "chess-desktop-app",
+  "productName": "Chess Desktop App",
+  "version": "1.0.0",
+  "description": "Desktop application for Chess.com",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "package": "electron-vite build && electron-builder",
+    "package:win": "electron-vite build && electron-builder --win",
+    "package:mac": "electron-vite build && electron-builder --mac",
+    "package:linux": "electron-vite build && electron-builder --linux",
+    "build:win": "electron-vite build && electron-builder --win --publish never",
+    "build:mac": "electron-vite build && electron-builder --mac --publish never",
+    "build:linux": "electron-vite build && electron-builder --linux --publish never"
+  },
+  "keywords": [
+    "chess",
+    "chess.com",
+    "electron",
+    "desktop"
+  ],
+  "author": {
+    "name": "wemune",
+    "email": "contact@chessdesktop.app"
+  },
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^5.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  },
+  "dependencies": {
+    "electron-log": "^5.4.3",
+    "electron-store": "^11.0.2",
+    "electron-updater": "^6.6.2"
+  }
+}

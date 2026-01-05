@@ -1,0 +1,62 @@
+appId: com.chess.desktop
+productName: Chess Desktop App
+
+directories:
+  buildResources: resources
+  output: dist
+
+files:
+  - out/**/*
+  - package.json
+
+publish:
+  provider: github
+  owner: wemune
+  repo: chess-desktop-app
+
+mac:
+  category: public.app-category.games
+  icon: resources/icon.icns
+  artifactName: Chess-Desktop-App-${arch}.${ext}
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  hardenedRuntime: true
+  gatekeeperAssess: false
+
+win:
+  icon: resources/icon.ico
+  forceCodeSigning: false
+  artifactName: Chess-Desktop-App-Setup.${ext}
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+linux:
+  category: Game
+  icon: resources/icon.png
+  artifactName: Chess-Desktop-App-${arch}.${ext}
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  deleteAppDataOnUninstall: false
+  uninstallDisplayName: Chess Desktop App
