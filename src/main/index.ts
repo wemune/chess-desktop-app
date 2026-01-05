@@ -6,6 +6,7 @@ import { initAutoUpdater, setMainWindow } from './auto-updater'
 import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
+import { CHESS_SELECTORS, buildHideCSS } from '../shared/chess-selectors'
 
 if (process.platform === 'win32') {
   app.setAppUserModelId('Chess Desktop App')
@@ -241,7 +242,7 @@ app.on('web-contents-created', (_event, contents) => {
 
       const chatEnabled = store.get('chatEnabled')
       if (!chatEnabled) {
-        contents.insertCSS('.resizable-chat-area-component { display: none !important; }').catch((err) => {
+        contents.insertCSS(buildHideCSS(CHESS_SELECTORS.CHAT)).catch((err) => {
           log.error('Failed to hide chat on page load:', err)
         })
       }

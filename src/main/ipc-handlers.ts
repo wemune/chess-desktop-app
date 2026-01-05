@@ -4,6 +4,7 @@ import { downloadUpdate, installUpdate } from './auto-updater'
 import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
+import { CHESS_SELECTORS, buildHideCSS, buildShowCSS } from '../shared/chess-selectors'
 
 let chessWebContents: WebContents | null = null
 
@@ -74,8 +75,8 @@ export function registerIpcHandlers(): void {
 
         if (chessWebContents) {
           const cssCode = settings.chatEnabled
-            ? '.resizable-chat-area-component { display: block !important; }'
-            : '.resizable-chat-area-component { display: none !important; }'
+            ? buildShowCSS(CHESS_SELECTORS.CHAT)
+            : buildHideCSS(CHESS_SELECTORS.CHAT)
 
           chessWebContents.insertCSS(cssCode).catch((err) => {
             log.error('Failed to toggle chat visibility:', err)
