@@ -24,6 +24,9 @@ const electronAPI = {
     get: () => ipcRenderer.invoke(IPC_CHANNELS.SETTINGS.GET) as Promise<StoreSchema>,
     set: (settings: Partial<StoreSchema>) => ipcRenderer.send(IPC_CHANNELS.SETTINGS.SET, settings)
   },
+  logs: {
+    openFolder: () => ipcRenderer.send(IPC_CHANNELS.LOGS.OPEN_FOLDER)
+  },
   platform: {
     get: () => ipcRenderer.invoke(IPC_CHANNELS.PLATFORM.GET) as Promise<NodeJS.Platform>
   },

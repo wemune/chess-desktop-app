@@ -1,7 +1,8 @@
-import { ipcMain, BrowserWindow, WebContents } from 'electron'
+import { ipcMain, BrowserWindow, WebContents, shell } from 'electron'
 import { store, StoreSchema } from './store'
 import { downloadUpdate, installUpdate } from './auto-updater'
 import log from 'electron-log'
+import { dirname } from 'path'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
 import { CHESS_SELECTORS, buildHideCSS, buildShowCSS } from '../shared/chess-selectors'
@@ -85,6 +86,17 @@ export function registerIpcHandlers(): void {
       } else {
         log.warn('Invalid chatEnabled setting received:', settings.chatEnabled)
       }
+    }
+  })
+
+  ipcMain.on(IPC_CHANNELS.LOGS.OPEN_FOLDER, async () => {
+    const logPath = log.transports.file.getFile().path
+    const logDir = dirname(logPath)
+    try {
+      await shell.openPath(logDir)
+      log.info('Opened logs folder:', logDir)
+    } catch (err) {
+      log.error('Failed to open logs folder:', err)
     }
   })
 

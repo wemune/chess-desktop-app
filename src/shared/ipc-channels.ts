@@ -10,6 +10,9 @@ export const IPC_CHANNELS = {
     GET: 'settings:get',
     SET: 'settings:set'
   },
+  LOGS: {
+    OPEN_FOLDER: 'logs:open-folder'
+  },
   PLATFORM: {
     GET: 'platform:get'
   },

@@ -4,6 +4,7 @@ export class SettingsModal {
   private closeBtn: HTMLButtonElement
   private notificationsToggle: HTMLInputElement
   private chatToggle: HTMLInputElement
+  private openLogsBtn: HTMLButtonElement
 
   constructor() {
     this.modal = document.getElementById('settings-modal') as HTMLElement
@@ -11,6 +12,7 @@ export class SettingsModal {
     this.closeBtn = document.getElementById('settings-close') as HTMLButtonElement
     this.notificationsToggle = document.getElementById('notifications-toggle') as HTMLInputElement
     this.chatToggle = document.getElementById('chat-toggle') as HTMLInputElement
+    this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
     this.bindEvents()
   }
@@ -35,6 +37,10 @@ export class SettingsModal {
       window.electronAPI.settings.set({
         chatEnabled: this.chatToggle.checked
       })
+    })
+
+    this.openLogsBtn.addEventListener('click', () => {
+      window.electronAPI.logs.openFolder()
     })
 
     document.addEventListener('keydown', (e) => {
