@@ -1,9 +1,13 @@
 import { Titlebar } from './titlebar'
 import { SettingsModal } from './settings-modal'
+import log from 'electron-log/renderer'
 
 function setupLoadingIndicator() {
   const loadingBar = document.getElementById('loading-bar')
-  if (!loadingBar) return
+  if (!loadingBar) {
+    log.error('Failed to setup loading indicator: loading-bar element not found')
+    return
+  }
 
   let loadingTimeout: number | null = null
 
@@ -15,7 +19,7 @@ function setupLoadingIndicator() {
     loadingTimeout = window.setTimeout(() => {
       loadingBar.classList.add('hidden')
       loadingBar.classList.remove('loading')
-      console.warn('Loading timeout - took longer than 30 seconds')
+      log.warn('Loading timeout - took longer than 30 seconds')
     }, 30000)
   })
 
@@ -34,10 +38,21 @@ function setupErrorHandling() {
   const errorMessage = document.getElementById('error-message')
   const retryBtn = document.getElementById('error-retry')
 
-  if (!errorOverlay || !errorMessage || !retryBtn) return
+  if (!errorOverlay || !errorMessage || !retryBtn) {
+    log.error('Failed to setup error handling: missing required elements', {
+      errorOverlay: !!errorOverlay,
+      errorMessage: !!errorMessage,
+      retryBtn: !!retryBtn
+    })
+    return
+  }
 
   window.electronAPI.webview.onLoadError((error) => {
-    errorMessage.textContent = `Unable to connect to Chess.com: ${error.errorDescription}`
+    if (!navigator.onLine) {
+      errorMessage.textContent = 'No internet connection. Please check your network and try again.'
+    } else {
+      errorMessage.textContent = `Unable to connect to Chess.com: ${error.errorDescription}`
+    }
     errorOverlay.classList.remove('hidden')
   })
 
@@ -61,6 +76,16 @@ function setupAutoUpdater() {
   const progressFill = document.getElementById('update-progress-fill')
 
   if (!banner || !message || !downloadBtn || !dismissBtn || !progressContainer || !progressLabel || !progressPercent || !progressFill) {
+    log.error('Failed to setup auto-updater: missing required elements', {
+      banner: !!banner,
+      message: !!message,
+      downloadBtn: !!downloadBtn,
+      dismissBtn: !!dismissBtn,
+      progressContainer: !!progressContainer,
+      progressLabel: !!progressLabel,
+      progressPercent: !!progressPercent,
+      progressFill: !!progressFill
+    })
     return
   }
 
@@ -135,24 +160,51 @@ function setupKeyboardShortcuts() {
 
 async function init() {
   if (!window.electronAPI) {
-    console.error('electronAPI not available!')
+    log.error('electronAPI not available!')
     return
   }
 
-  const platform = await window.electronAPI.platform.get()
-  document.body.classList.add(`platform-${platform}`)
+  try {
+    const platform = await window.electronAPI.platform.get()
+    document.body.classList.add(`platform-${platform}`)
+  } catch (err) {
+    log.error('Failed to get platform:', err)
+  }
 
-  const titlebar = new Titlebar()
-  const settingsModal = new SettingsModal()
+  try {
+    const titlebar = new Titlebar()
+    const settingsModal = new SettingsModal()
 
-  titlebar.onSettingsClick(() => settingsModal.open())
+    titlebar.onSettingsClick(() => settingsModal.open())
 
-  await settingsModal.init()
+    await settingsModal.init()
+  } catch (err) {
+    log.error('Failed to initialize titlebar or settings:', err)
+  }
 
-  setupKeyboardShortcuts()
-  setupLoadingIndicator()
-  setupErrorHandling()
-  setupAutoUpdater()
+  try {
+    setupKeyboardShortcuts()
+  } catch (err) {
+    log.error('Failed to setup keyboard shortcuts:', err)
+  }
+
+  try {
+    setupLoadingIndicator()
+  } catch (err) {
+    log.error('Failed to setup loading indicator:', err)
+  }
+
+  try {
+    setupErrorHandling()
+  } catch (err) {
+    log.error('Failed to setup error handling:', err)
+  }
+
+  try {
+    setupAutoUpdater()
+  } catch (err) {
+    log.error('Failed to setup auto-updater:', err)
+  }
 }
 
-init().catch(err => console.error('Init error:', err))
+init()
