@@ -3,12 +3,14 @@ export class SettingsModal {
   private backdrop: HTMLElement
   private closeBtn: HTMLButtonElement
   private notificationsToggle: HTMLInputElement
+  private chatToggle: HTMLInputElement
 
   constructor() {
     this.modal = document.getElementById('settings-modal') as HTMLElement
     this.backdrop = this.modal.querySelector('.modal-backdrop') as HTMLElement
     this.closeBtn = document.getElementById('settings-close') as HTMLButtonElement
     this.notificationsToggle = document.getElementById('notifications-toggle') as HTMLInputElement
+    this.chatToggle = document.getElementById('chat-toggle') as HTMLInputElement
 
     this.bindEvents()
   }
@@ -16,6 +18,7 @@ export class SettingsModal {
   async init(): Promise<void> {
     const settings = await window.electronAPI.settings.get()
     this.notificationsToggle.checked = settings.notificationsEnabled ?? true
+    this.chatToggle.checked = settings.chatEnabled ?? true
   }
 
   private bindEvents(): void {
@@ -25,6 +28,12 @@ export class SettingsModal {
     this.notificationsToggle.addEventListener('change', () => {
       window.electronAPI.settings.set({
         notificationsEnabled: this.notificationsToggle.checked
+      })
+    })
+
+    this.chatToggle.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        chatEnabled: this.chatToggle.checked
       })
     })
 

@@ -4,6 +4,7 @@ export interface StoreSchema {
   window: { width: number; height: number; x?: number; y?: number; isMaximized: boolean }
   zoomLevel: number
   notificationsEnabled: boolean
+  chatEnabled: boolean
 }
 
 const electronAPI = {

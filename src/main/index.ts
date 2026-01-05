@@ -228,6 +228,13 @@ app.on('web-contents-created', (_event, contents) => {
 
     contents.on('did-stop-loading', () => {
       mainWindow?.webContents.send('webview:load-stop')
+
+      const chatEnabled = store.get('chatEnabled')
+      if (!chatEnabled) {
+        contents.insertCSS('.resizable-chat-area-component { display: none !important; }').catch((err) => {
+          log.error('Failed to hide chat on page load:', err)
+        })
+      }
     })
 
     contents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {

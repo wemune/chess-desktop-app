@@ -67,6 +67,25 @@ export function registerIpcHandlers(): void {
         log.warn('Invalid notificationsEnabled setting received:', settings.notificationsEnabled)
       }
     }
+
+    if (settings.chatEnabled !== undefined) {
+      if (typeof settings.chatEnabled === 'boolean') {
+        store.set('chatEnabled', settings.chatEnabled)
+        log.info('Chat setting updated:', settings.chatEnabled)
+
+        if (chessWebContents) {
+          const cssCode = settings.chatEnabled
+            ? '.resizable-chat-area-component { display: block !important; }'
+            : '.resizable-chat-area-component { display: none !important; }'
+
+          chessWebContents.insertCSS(cssCode).catch((err) => {
+            log.error('Failed to toggle chat visibility:', err)
+          })
+        }
+      } else {
+        log.warn('Invalid chatEnabled setting received:', settings.chatEnabled)
+      }
+    }
   })
 
   ipcMain.handle('platform:get', (): NodeJS.Platform => {
