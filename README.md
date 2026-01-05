@@ -33,17 +33,17 @@ A modern desktop application for Chess.com with native features and keyboard sho
 
 ### macOS
 
-**Important:** Since this app is not code-signed, macOS will block it by default.
+**Important:** Since this app is not code-signed, macOS will block it by default. Follow these steps to bypass the security warning:
 
 1. Download the appropriate DMG for your Mac:
    - **Apple Silicon** (M-series): `Chess-Desktop-App-arm64.dmg`
    - **Intel**: `Chess-Desktop-App-x64.dmg`
 2. Open the DMG and drag the app to Applications
-3. Open Terminal and run:
+3. Open Terminal and run this command to remove the quarantine flag:
    ```bash
    xattr -cr "/Applications/Chess Desktop App.app"
    ```
-4. Launch the app normally
+4. Launch the app normally - it should now open without warnings
 
 ### Linux
 
