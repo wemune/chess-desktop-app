@@ -1,3 +1,5 @@
+import { zoomLevelToPercentage } from '../shared/constants'
+
 export class Titlebar {
   private minimizeBtn: HTMLButtonElement
   private maximizeBtn: HTMLButtonElement
@@ -108,7 +110,7 @@ export class Titlebar {
 
   private async updateZoomDisplay(): Promise<void> {
     const zoomLevel = await window.electronAPI.webview.getZoom()
-    const percentage = Math.round((1.2 ** zoomLevel) * 100)
+    const percentage = zoomLevelToPercentage(zoomLevel)
     this.zoomLevelDisplay.textContent = `${percentage}%`
     this.zoomLevelDisplay.title = `Zoom: ${percentage}% (Click to reset)`
   }

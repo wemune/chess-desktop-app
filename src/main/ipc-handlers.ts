@@ -2,9 +2,7 @@ import { ipcMain, BrowserWindow, WebContents } from 'electron'
 import { store, StoreSchema } from './store'
 import { downloadUpdate, installUpdate } from './auto-updater'
 import log from 'electron-log'
-
-const ZOOM_MIN = -3
-const ZOOM_MAX = 5
+import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 
 let chessWebContents: WebContents | null = null
 
@@ -134,7 +132,9 @@ export function registerIpcHandlers(): void {
       return
     }
     const currentZoom = chessWebContents.getZoomLevel()
-    const newZoom = Math.min(currentZoom + 0.5, ZOOM_MAX)
+    const currentIndex = getClosestZoomIndex(currentZoom)
+    const nextIndex = Math.min(currentIndex + 1, ZOOM_PERCENTAGES.length - 1)
+    const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[nextIndex])
     chessWebContents.setZoomLevel(newZoom)
     store.set('zoomLevel', newZoom)
   })
@@ -145,7 +145,9 @@ export function registerIpcHandlers(): void {
       return
     }
     const currentZoom = chessWebContents.getZoomLevel()
-    const newZoom = Math.max(currentZoom - 0.5, ZOOM_MIN)
+    const currentIndex = getClosestZoomIndex(currentZoom)
+    const prevIndex = Math.max(currentIndex - 1, 0)
+    const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[prevIndex])
     chessWebContents.setZoomLevel(newZoom)
     store.set('zoomLevel', newZoom)
   })

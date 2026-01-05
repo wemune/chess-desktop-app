@@ -4,6 +4,7 @@ import { store } from './store'
 import { registerIpcHandlers, setChessWebContents } from './ipc-handlers'
 import { initAutoUpdater, setMainWindow } from './auto-updater'
 import log from 'electron-log'
+import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 
 if (process.platform === 'win32') {
   app.setAppUserModelId('Chess Desktop App')
@@ -171,7 +172,9 @@ app.on('web-contents-created', (_event, contents) => {
       if (modifier && (input.key === '=' || input.key === '+')) {
         event.preventDefault()
         const currentZoom = contents.getZoomLevel()
-        const newZoom = Math.min(currentZoom + 0.5, 5)
+        const currentIndex = getClosestZoomIndex(currentZoom)
+        const nextIndex = Math.min(currentIndex + 1, ZOOM_PERCENTAGES.length - 1)
+        const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[nextIndex])
         contents.setZoomLevel(newZoom)
         store.set('zoomLevel', newZoom)
       }
@@ -179,7 +182,9 @@ app.on('web-contents-created', (_event, contents) => {
       if (modifier && (input.key === '-' || input.key === '_')) {
         event.preventDefault()
         const currentZoom = contents.getZoomLevel()
-        const newZoom = Math.max(currentZoom - 0.5, -3)
+        const currentIndex = getClosestZoomIndex(currentZoom)
+        const prevIndex = Math.max(currentIndex - 1, 0)
+        const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[prevIndex])
         contents.setZoomLevel(newZoom)
         store.set('zoomLevel', newZoom)
       }

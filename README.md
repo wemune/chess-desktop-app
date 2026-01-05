@@ -67,7 +67,7 @@ The app will automatically check for updates on startup and notify you when a ne
 - **Native Desktop Experience** - Full-featured desktop app for Windows, macOS, and Linux
 - **Seamless Navigation** - Back/forward buttons and keyboard shortcuts (Alt+Left/Right)
 - **Zoom Controls** - Easily adjust text size with zoom in/out buttons or keyboard shortcuts (Ctrl/Cmd +/-)
-- **Zoom Limits** - Safe zoom range to prevent UI breaking (33% - 249%)
+- **Zoom Limits** - Safe zoom range to prevent UI breaking (33% - 250%)
 - **Desktop Notifications** - Receive notifications from Chess.com
 - **Customizable Settings** - Toggle notifications and chat visibility to personalize your experience
 - **Download Support** - Save PGN files and other downloads directly from the app
