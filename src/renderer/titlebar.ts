@@ -9,7 +9,6 @@ export class Titlebar {
   private zoomOutBtn: HTMLButtonElement
   private zoomLevelDisplay: HTMLElement
   private settingsCallback: (() => void) | null = null
-  private updateInterval: number | null = null
 
   constructor() {
     this.minimizeBtn = document.getElementById('minimize-btn') as HTMLButtonElement
@@ -74,10 +73,10 @@ export class Titlebar {
       this.updateMaximizeIcon(isMaximized)
     })
 
-    this.updateInterval = window.setInterval(() => {
+    window.electronAPI.webview.onLoadStop(() => {
       this.updateNavigationButtons()
       this.updateZoomDisplay()
-    }, 500)
+    })
   }
 
   private async updateMaximizeIcon(isMaximized?: boolean): Promise<void> {
@@ -116,12 +115,5 @@ export class Titlebar {
 
   onSettingsClick(callback: () => void): void {
     this.settingsCallback = callback
-  }
-
-  destroy(): void {
-    if (this.updateInterval !== null) {
-      clearInterval(this.updateInterval)
-      this.updateInterval = null
-    }
   }
 }
