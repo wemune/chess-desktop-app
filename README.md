@@ -69,11 +69,12 @@ The app will automatically check for updates on startup and notify you when a ne
 - **Zoom Controls** - Easily adjust text size with zoom in/out buttons or keyboard shortcuts (Ctrl/Cmd +/-)
 - **Zoom Limits** - Safe zoom range to prevent UI breaking (33% - 249%)
 - **Desktop Notifications** - Receive notifications from Chess.com
+- **Customizable Settings** - Toggle notifications and chat visibility to personalize your experience
 - **Download Support** - Save PGN files and other downloads directly from the app
 - **Loading Indicators** - Visual feedback during page loads with 30-second timeout
 - **Error Handling** - Graceful error recovery with retry functionality
-- **Persistent Settings** - Remembers your window size, position, and zoom level
-- **Auto-Updates** - Automatically notifies you when new versions are available
+- **Persistent Settings** - Remembers your window size, position, zoom level, and preferences
+- **Auto-Updates** - Automatically downloads updates and installs on restart
 - **Logging** - Detailed logs for troubleshooting (stored in app data folder)
 
 ## Keyboard Shortcuts
