@@ -69,18 +69,16 @@ function setupAutoUpdater() {
   const banner = document.getElementById('update-banner')
   const message = document.getElementById('update-message')
   const downloadBtn = document.getElementById('update-download-btn')
-  const dismissBtn = document.getElementById('update-dismiss-btn')
   const progressContainer = document.getElementById('update-progress')
   const progressLabel = document.getElementById('update-progress-label')
   const progressPercent = document.getElementById('update-progress-percent')
   const progressFill = document.getElementById('update-progress-fill')
 
-  if (!banner || !message || !downloadBtn || !dismissBtn || !progressContainer || !progressLabel || !progressPercent || !progressFill) {
+  if (!banner || !message || !downloadBtn || !progressContainer || !progressLabel || !progressPercent || !progressFill) {
     log.error('Failed to setup auto-updater: missing required elements', {
       banner: !!banner,
       message: !!message,
       downloadBtn: !!downloadBtn,
-      dismissBtn: !!dismissBtn,
       progressContainer: !!progressContainer,
       progressLabel: !!progressLabel,
       progressPercent: !!progressPercent,
@@ -99,11 +97,6 @@ function setupAutoUpdater() {
     progressContainer.classList.remove('hidden')
   })
 
-  dismissBtn.addEventListener('click', () => {
-    banner.classList.add('hidden')
-    document.body.classList.remove('update-visible')
-  })
-
   window.electronAPI.update.onDownloadProgress((progress) => {
     const percent = Math.round(progress.percent)
     progressPercent.textContent = `${percent}%`
@@ -115,7 +108,6 @@ function setupAutoUpdater() {
     const updateContent = document.querySelector('.update-content')
     updateContent?.classList.remove('hidden')
     message.textContent = 'Update ready! Will install on restart.'
-    downloadBtn.textContent = 'Restart Now'
     downloadBtn.onclick = () => window.electronAPI.update.install()
   })
 }
