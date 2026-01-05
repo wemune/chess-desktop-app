@@ -40,8 +40,15 @@ function createWindow(): void {
   const width = Math.min(windowConfig.width, screenWidth)
   const height = Math.min(windowConfig.height, screenHeight)
 
-  const x = windowConfig.x !== undefined ? windowConfig.x : Math.floor((screenWidth - width) / 2)
-  const y = windowConfig.y !== undefined ? windowConfig.y : Math.floor((screenHeight - height) / 2)
+  let x = windowConfig.x !== undefined ? windowConfig.x : Math.floor((screenWidth - width) / 2)
+  let y = windowConfig.y !== undefined ? windowConfig.y : Math.floor((screenHeight - height) / 2)
+
+  if (x < 0 || x + width > screenWidth) {
+    x = Math.floor((screenWidth - width) / 2)
+  }
+  if (y < 0 || y + height > screenHeight) {
+    y = Math.floor((screenHeight - height) / 2)
+  }
 
   const isMac = process.platform === 'darwin'
   const isLinux = process.platform === 'linux'
