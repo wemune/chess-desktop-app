@@ -5,6 +5,7 @@ export class SettingsModal {
   private notificationsToggle: HTMLInputElement
   private chatToggle: HTMLInputElement
   private alwaysOnTopToggle: HTMLInputElement
+  private hardwareAccelerationToggle: HTMLInputElement
   private openLogsBtn: HTMLButtonElement
 
   constructor() {
@@ -14,6 +15,7 @@ export class SettingsModal {
     this.notificationsToggle = document.getElementById('notifications-toggle') as HTMLInputElement
     this.chatToggle = document.getElementById('chat-toggle') as HTMLInputElement
     this.alwaysOnTopToggle = document.getElementById('always-on-top-toggle') as HTMLInputElement
+    this.hardwareAccelerationToggle = document.getElementById('hardware-acceleration-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
     this.bindEvents()
@@ -24,6 +26,7 @@ export class SettingsModal {
     this.notificationsToggle.checked = settings.notificationsEnabled ?? true
     this.chatToggle.checked = settings.chatEnabled ?? true
     this.alwaysOnTopToggle.checked = settings.alwaysOnTop ?? false
+    this.hardwareAccelerationToggle.checked = settings.hardwareAcceleration ?? true
   }
 
   private bindEvents(): void {
@@ -46,6 +49,13 @@ export class SettingsModal {
       window.electronAPI.settings.set({
         alwaysOnTop: this.alwaysOnTopToggle.checked
       })
+    })
+
+    this.hardwareAccelerationToggle.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        hardwareAcceleration: this.hardwareAccelerationToggle.checked
+      })
+      window.electronAPI.restartDialog.show()
     })
 
     this.openLogsBtn.addEventListener('click', () => {

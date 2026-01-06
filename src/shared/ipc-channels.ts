@@ -16,6 +16,9 @@ export const IPC_CHANNELS = {
   PLATFORM: {
     GET: 'platform:get'
   },
+  APP: {
+    RESTART: 'app:restart'
+  },
   WEBVIEW: {
     GO_BACK: 'webview:go-back',
     GO_FORWARD: 'webview:go-forward',

@@ -7,6 +7,7 @@ export interface StoreSchema {
   notificationsEnabled: boolean
   chatEnabled: boolean
   alwaysOnTop: boolean
+  hardwareAcceleration: boolean
 }
 
 const electronAPI = {
@@ -30,6 +31,15 @@ const electronAPI = {
   },
   platform: {
     get: () => ipcRenderer.invoke(IPC_CHANNELS.PLATFORM.GET) as Promise<NodeJS.Platform>
+  },
+  app: {
+    restart: () => ipcRenderer.send(IPC_CHANNELS.APP.RESTART)
+  },
+  restartDialog: {
+    show: () => {
+      const event = new CustomEvent('show-restart-dialog')
+      window.dispatchEvent(event)
+    }
   },
   webview: {
     goBack: () => ipcRenderer.send(IPC_CHANNELS.WEBVIEW.GO_BACK),

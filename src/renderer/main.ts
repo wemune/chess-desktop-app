@@ -1,5 +1,6 @@
 import { Titlebar } from './titlebar'
 import { SettingsModal } from './settings-modal'
+import { RestartDialog } from './restart-dialog'
 import log from 'electron-log/renderer'
 
 function setupLoadingIndicator() {
@@ -166,6 +167,7 @@ async function init() {
   try {
     const titlebar = new Titlebar()
     const settingsModal = new SettingsModal()
+    const restartDialog = new RestartDialog()
 
     titlebar.onSettingsClick(() => settingsModal.open())
 

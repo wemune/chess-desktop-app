@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, WebContents, shell } from 'electron'
+import { ipcMain, BrowserWindow, WebContents, shell, app } from 'electron'
 import { store, StoreSchema } from './store'
 import { downloadUpdate, installUpdate } from './auto-updater'
 import log from 'electron-log'
@@ -101,6 +101,15 @@ export function registerIpcHandlers(): void {
         log.warn('Invalid alwaysOnTop setting received:', settings.alwaysOnTop)
       }
     }
+
+    if (settings.hardwareAcceleration !== undefined) {
+      if (typeof settings.hardwareAcceleration === 'boolean') {
+        store.set('hardwareAcceleration', settings.hardwareAcceleration)
+        log.info('Hardware acceleration setting updated:', settings.hardwareAcceleration)
+      } else {
+        log.warn('Invalid hardwareAcceleration setting received:', settings.hardwareAcceleration)
+      }
+    }
   })
 
   ipcMain.on(IPC_CHANNELS.LOGS.OPEN_FOLDER, async () => {
@@ -199,5 +208,11 @@ export function registerIpcHandlers(): void {
 
   ipcMain.on(IPC_CHANNELS.UPDATE.INSTALL, () => {
     installUpdate()
+  })
+
+  ipcMain.on(IPC_CHANNELS.APP.RESTART, () => {
+    log.info('Restarting application...')
+    app.relaunch()
+    app.quit()
   })
 }

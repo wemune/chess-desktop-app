@@ -134,6 +134,16 @@
             <span class="toggle-slider"></span>
           </label>
         </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-label">Hardware Acceleration</div>
+            <div class="setting-description">Use GPU for rendering (requires restart)</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="hardware-acceleration-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -143,6 +153,22 @@
       <h2>Connection Error</h2>
       <p id="error-message">Unable to connect to Chess.com</p>
       <button id="error-retry" class="error-btn">Retry</button>
+    </div>
+  </div>
+
+  <div id="restart-dialog" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content restart-dialog-content">
+      <div class="modal-header">
+        <h2>Restart Required</h2>
+      </div>
+      <div class="modal-body">
+        <p>This setting requires a restart to take effect.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="restart-later-btn" class="modal-btn secondary-btn">Later</button>
+        <button id="restart-now-btn" class="modal-btn primary-btn">Restart Now</button>
+      </div>
     </div>
   </div>
 
