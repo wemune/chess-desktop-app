@@ -15,6 +15,7 @@ export interface StoreSchema {
   chatEnabled: boolean
   alwaysOnTop: boolean
   hardwareAcceleration: boolean
+  soundMuted: boolean
 }
 
 const defaults: StoreSchema = {
@@ -27,7 +28,8 @@ const defaults: StoreSchema = {
   notificationsEnabled: true,
   chatEnabled: true,
   alwaysOnTop: false,
-  hardwareAcceleration: true
+  hardwareAcceleration: true,
+  soundMuted: false
 }
 
 export const store = new Store<StoreSchema>({ defaults })

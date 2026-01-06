@@ -110,6 +110,19 @@ export function registerIpcHandlers(): void {
         log.warn('Invalid hardwareAcceleration setting received:', settings.hardwareAcceleration)
       }
     }
+
+    if (settings.soundMuted !== undefined) {
+      if (typeof settings.soundMuted === 'boolean') {
+        store.set('soundMuted', settings.soundMuted)
+        log.info('Sound muted setting updated:', settings.soundMuted)
+
+        if (chessWebContents) {
+          chessWebContents.setAudioMuted(settings.soundMuted)
+        }
+      } else {
+        log.warn('Invalid soundMuted setting received:', settings.soundMuted)
+      }
+    }
   })
 
   ipcMain.on(IPC_CHANNELS.LOGS.OPEN_FOLDER, async () => {

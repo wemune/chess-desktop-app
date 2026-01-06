@@ -175,6 +175,9 @@ app.on('web-contents-created', (_event, contents) => {
     const savedZoom = store.get('zoomLevel')
     contents.setZoomLevel(savedZoom)
 
+    const soundMuted = store.get('soundMuted')
+    contents.setAudioMuted(soundMuted)
+
     contents.on('before-input-event', (event, input) => {
       if (input.type !== 'keyDown') return
 

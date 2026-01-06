@@ -8,6 +8,7 @@ export interface StoreSchema {
   chatEnabled: boolean
   alwaysOnTop: boolean
   hardwareAcceleration: boolean
+  soundMuted: boolean
 }
 
 const electronAPI = {
