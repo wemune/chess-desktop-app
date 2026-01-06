@@ -111,7 +111,6 @@ function createWindow(): void {
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
-    mainWindow.webContents.openDevTools()
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
@@ -119,6 +118,24 @@ function createWindow(): void {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow?.webContents.send('platform', process.platform)
   })
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+      if (input.type !== 'keyDown') return
+
+      const isMac = process.platform === 'darwin'
+      const modifier = isMac ? input.meta : input.control
+
+      if (modifier && input.shift && input.key.toLowerCase() === 'i') {
+        event.preventDefault()
+        if (mainWindow?.webContents.isDevToolsOpened()) {
+          mainWindow.webContents.closeDevTools()
+        } else {
+          mainWindow?.webContents.openDevTools()
+        }
+      }
+    })
+  }
 
   setMainWindow(mainWindow)
 }
@@ -154,6 +171,15 @@ app.on('web-contents-created', (_event, contents) => {
 
       const isMac = process.platform === 'darwin'
       const modifier = isMac ? input.meta : input.control
+
+      if (process.env.NODE_ENV === 'development' && input.key === 'F12') {
+        event.preventDefault()
+        if (contents.isDevToolsOpened()) {
+          contents.closeDevTools()
+        } else {
+          contents.openDevTools()
+        }
+      }
 
       if ((modifier && input.key.toLowerCase() === 'r') || input.key === 'F5') {
         event.preventDefault()
