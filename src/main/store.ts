@@ -13,6 +13,7 @@ export interface StoreSchema {
   zoomLevel: number
   notificationsEnabled: boolean
   chatEnabled: boolean
+  alwaysOnTop: boolean
 }
 
 const defaults: StoreSchema = {
@@ -23,7 +24,8 @@ const defaults: StoreSchema = {
   },
   zoomLevel: 0,
   notificationsEnabled: true,
-  chatEnabled: true
+  chatEnabled: true,
+  alwaysOnTop: false
 }
 
 export const store = new Store<StoreSchema>({ defaults })

@@ -88,6 +88,9 @@ function createWindow(): void {
     mainWindow.maximize()
   }
 
+  const alwaysOnTop = store.get('alwaysOnTop')
+  mainWindow.setAlwaysOnTop(alwaysOnTop)
+
   mainWindow.on('maximize', () => {
     mainWindow?.webContents.send(IPC_CHANNELS.WINDOW.MAXIMIZE_CHANGE, true)
   })

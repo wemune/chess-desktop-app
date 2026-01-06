@@ -6,6 +6,7 @@ export interface StoreSchema {
   zoomLevel: number
   notificationsEnabled: boolean
   chatEnabled: boolean
+  alwaysOnTop: boolean
 }
 
 const electronAPI = {

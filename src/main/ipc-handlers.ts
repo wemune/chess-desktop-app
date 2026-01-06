@@ -87,6 +87,20 @@ export function registerIpcHandlers(): void {
         log.warn('Invalid chatEnabled setting received:', settings.chatEnabled)
       }
     }
+
+    if (settings.alwaysOnTop !== undefined) {
+      if (typeof settings.alwaysOnTop === 'boolean') {
+        store.set('alwaysOnTop', settings.alwaysOnTop)
+        log.info('Always on top setting updated:', settings.alwaysOnTop)
+
+        const win = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0]
+        if (win) {
+          win.setAlwaysOnTop(settings.alwaysOnTop)
+        }
+      } else {
+        log.warn('Invalid alwaysOnTop setting received:', settings.alwaysOnTop)
+      }
+    }
   })
 
   ipcMain.on(IPC_CHANNELS.LOGS.OPEN_FOLDER, async () => {

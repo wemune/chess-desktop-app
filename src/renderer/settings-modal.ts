@@ -4,6 +4,7 @@ export class SettingsModal {
   private closeBtn: HTMLButtonElement
   private notificationsToggle: HTMLInputElement
   private chatToggle: HTMLInputElement
+  private alwaysOnTopToggle: HTMLInputElement
   private openLogsBtn: HTMLButtonElement
 
   constructor() {
@@ -12,6 +13,7 @@ export class SettingsModal {
     this.closeBtn = document.getElementById('settings-close') as HTMLButtonElement
     this.notificationsToggle = document.getElementById('notifications-toggle') as HTMLInputElement
     this.chatToggle = document.getElementById('chat-toggle') as HTMLInputElement
+    this.alwaysOnTopToggle = document.getElementById('always-on-top-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
     this.bindEvents()
@@ -21,6 +23,7 @@ export class SettingsModal {
     const settings = await window.electronAPI.settings.get()
     this.notificationsToggle.checked = settings.notificationsEnabled ?? true
     this.chatToggle.checked = settings.chatEnabled ?? true
+    this.alwaysOnTopToggle.checked = settings.alwaysOnTop ?? false
   }
 
   private bindEvents(): void {
@@ -36,6 +39,12 @@ export class SettingsModal {
     this.chatToggle.addEventListener('change', () => {
       window.electronAPI.settings.set({
         chatEnabled: this.chatToggle.checked
+      })
+    })
+
+    this.alwaysOnTopToggle.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        alwaysOnTop: this.alwaysOnTopToggle.checked
       })
     })
 
