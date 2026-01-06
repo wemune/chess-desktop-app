@@ -27,7 +27,7 @@
   position: relative;
   background-color: #312e2b;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   max-width: 90%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   animation: modalSlideIn 0.2s ease-out;
@@ -85,15 +85,40 @@
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 24px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.settings-section {
+  margin-bottom: 28px;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #81b64c;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(129, 182, 76, 0.2);
 }
 
 .setting-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 12px 0;
+  gap: 20px;
+  padding: 14px 0;
+}
+
+.setting-item:last-child {
+  padding-bottom: 0;
 }
 
 .setting-info {

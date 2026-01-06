@@ -104,55 +104,66 @@
         </div>
       </div>
       <div class="modal-body">
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-label">Notifications</div>
-            <div class="setting-description">Receive notifications from Chess.com</div>
+        <div class="settings-section">
+          <div class="section-header">General</div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Chat</div>
+              <div class="setting-description">Show the chat component on Chess.com</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="chat-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="notifications-toggle" checked>
-            <span class="toggle-slider"></span>
-          </label>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Mute All Sounds</div>
+              <div class="setting-description">Disable all audio from Chess.com</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="sound-muted-toggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Notifications</div>
+              <div class="setting-description">Receive notifications from Chess.com</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="notifications-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
         </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-label">Chat</div>
-            <div class="setting-description">Show the chat component on Chess.com</div>
+
+        <div class="settings-section">
+          <div class="section-header">Window</div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Always on Top</div>
+              <div class="setting-description">Keep window above all other windows</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="always-on-top-toggle">
+              <span class="toggle-slider"></span>
+            </label>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="chat-toggle" checked>
-            <span class="toggle-slider"></span>
-          </label>
         </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-label">Always on Top</div>
-            <div class="setting-description">Keep window above all other windows</div>
+
+        <div class="settings-section">
+          <div class="section-header">Advanced</div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">Hardware Acceleration</div>
+              <div class="setting-description">Use GPU for rendering (requires restart)</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="hardware-acceleration-toggle" checked>
+              <span class="toggle-slider"></span>
+            </label>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="always-on-top-toggle">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-label">Hardware Acceleration</div>
-            <div class="setting-description">Use GPU for rendering (requires restart)</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="hardware-acceleration-toggle" checked>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-label">Mute All Sounds</div>
-            <div class="setting-description">Disable all audio from Chess.com</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="sound-muted-toggle">
-            <span class="toggle-slider"></span>
-          </label>
         </div>
       </div>
     </div>
