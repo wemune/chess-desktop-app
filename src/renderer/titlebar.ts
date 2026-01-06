@@ -1,4 +1,6 @@
 import { zoomLevelToPercentage } from '../shared/constants'
+import { createElement, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Settings, Minus, Square, Minimize2, X, Copy, CopyCheck } from 'lucide'
+import log from 'electron-log/renderer'
 
 export class Titlebar {
   private minimizeBtn: HTMLButtonElement
@@ -7,6 +9,8 @@ export class Titlebar {
   private settingsBtn: HTMLButtonElement
   private navBackBtn: HTMLButtonElement
   private navForwardBtn: HTMLButtonElement
+  private copyUrlBtn: HTMLButtonElement
+  private copyFeedback: HTMLElement
   private zoomInBtn: HTMLButtonElement
   private zoomOutBtn: HTMLButtonElement
   private zoomLevelDisplay: HTMLElement
@@ -19,14 +23,32 @@ export class Titlebar {
     this.settingsBtn = document.getElementById('settings-btn') as HTMLButtonElement
     this.navBackBtn = document.getElementById('nav-back') as HTMLButtonElement
     this.navForwardBtn = document.getElementById('nav-forward') as HTMLButtonElement
+    this.copyUrlBtn = document.getElementById('copy-url-btn') as HTMLButtonElement
+    this.copyFeedback = document.getElementById('copy-feedback') as HTMLElement
     this.zoomInBtn = document.getElementById('zoom-in') as HTMLButtonElement
     this.zoomOutBtn = document.getElementById('zoom-out') as HTMLButtonElement
     this.zoomLevelDisplay = document.getElementById('zoom-level') as HTMLElement
 
+    this.initializeIcons()
     this.bindEvents()
     this.updateMaximizeIcon()
     this.updateNavigationButtons()
     this.updateZoomDisplay()
+  }
+
+  private initializeIcons(): void {
+    const iconSize = { width: 16, height: 16, strokeWidth: 2 }
+    const controlSize = { width: 12, height: 12, strokeWidth: 2 }
+
+    this.navBackBtn.appendChild(createElement(ArrowLeft, iconSize))
+    this.navForwardBtn.appendChild(createElement(ArrowRight, iconSize))
+    this.copyUrlBtn.appendChild(createElement(Copy, iconSize))
+    this.zoomInBtn.appendChild(createElement(ZoomIn, iconSize))
+    this.zoomOutBtn.appendChild(createElement(ZoomOut, iconSize))
+    this.settingsBtn.appendChild(createElement(Settings, iconSize))
+    this.minimizeBtn.appendChild(createElement(Minus, controlSize))
+    this.maximizeBtn.appendChild(createElement(Square, controlSize))
+    this.closeBtn.appendChild(createElement(X, controlSize))
   }
 
   private bindEvents(): void {
@@ -56,6 +78,10 @@ export class Titlebar {
       setTimeout(() => this.updateNavigationButtons(), 100)
     })
 
+    this.copyUrlBtn.addEventListener('click', async () => {
+      await this.copyCurrentUrl()
+    })
+
     this.zoomInBtn.addEventListener('click', () => {
       window.electronAPI.webview.zoomIn()
       setTimeout(() => this.updateZoomDisplay(), 50)
@@ -83,19 +109,14 @@ export class Titlebar {
 
   private async updateMaximizeIcon(isMaximized?: boolean): Promise<void> {
     const maximized = isMaximized ?? await window.electronAPI.window.isMaximized()
-    const svg = this.maximizeBtn.querySelector('svg')
-    if (!svg) return
+    const controlSize = { width: 12, height: 12, strokeWidth: 2 }
 
+    this.maximizeBtn.innerHTML = ''
     if (maximized) {
-      svg.innerHTML = `
-        <rect x="3" y="0" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1"/>
-        <rect x="0" y="3" width="8" height="8" fill="#272522" stroke="currentColor" stroke-width="1"/>
-      `
+      this.maximizeBtn.appendChild(createElement(Minimize2, controlSize))
       this.maximizeBtn.title = 'Restore'
     } else {
-      svg.innerHTML = `
-        <rect x="1.5" y="1.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/>
-      `
+      this.maximizeBtn.appendChild(createElement(Square, controlSize))
       this.maximizeBtn.title = 'Maximize'
     }
   }
@@ -113,6 +134,35 @@ export class Titlebar {
     const percentage = zoomLevelToPercentage(zoomLevel)
     this.zoomLevelDisplay.textContent = `${percentage}%`
     this.zoomLevelDisplay.title = `Zoom: ${percentage}% (Click to reset)`
+  }
+
+  private async copyCurrentUrl(): Promise<void> {
+    try {
+      const url = await window.electronAPI.webview.getUrl()
+      log.info('Copying URL to clipboard:', url)
+
+      await navigator.clipboard.writeText(url)
+      log.info('URL copied successfully')
+
+      const iconSize = { width: 16, height: 16, strokeWidth: 2 }
+      this.copyUrlBtn.innerHTML = ''
+      this.copyUrlBtn.appendChild(createElement(CopyCheck, iconSize))
+
+      this.copyFeedback.classList.remove('hidden', 'fade-out')
+
+      setTimeout(() => {
+        this.copyUrlBtn.innerHTML = ''
+        this.copyUrlBtn.appendChild(createElement(Copy, iconSize))
+        this.copyFeedback.classList.add('fade-out')
+
+        setTimeout(() => {
+          this.copyFeedback.classList.add('hidden')
+          this.copyFeedback.classList.remove('fade-out')
+        }, 300)
+      }, 2000)
+    } catch (error) {
+      log.error('Failed to copy URL:', error)
+    }
   }
 
   onSettingsClick(callback: () => void): void {

@@ -215,6 +215,10 @@ export function registerIpcHandlers(): void {
     return chessWebContents?.getZoomLevel() ?? 0
   })
 
+  ipcMain.handle(IPC_CHANNELS.WEBVIEW.GET_URL, (): string => {
+    return chessWebContents?.getURL() ?? ''
+  })
+
   ipcMain.on(IPC_CHANNELS.UPDATE.DOWNLOAD, () => {
     downloadUpdate()
   })

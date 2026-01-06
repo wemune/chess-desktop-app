@@ -29,6 +29,7 @@ export const IPC_CHANNELS = {
     ZOOM_OUT: 'webview:zoom-out',
     ZOOM_RESET: 'webview:zoom-reset',
     GET_ZOOM: 'webview:get-zoom',
+    GET_URL: 'webview:get-url',
     LOAD_START: 'webview:load-start',
     LOAD_STOP: 'webview:load-stop',
     LOAD_ERROR: 'webview:load-error',

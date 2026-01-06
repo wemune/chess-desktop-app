@@ -203,6 +203,23 @@ html, body {
   pointer-events: none;
 }
 
+.titlebar-btn i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.titlebar-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+.window-control svg {
+  width: 12px;
+  height: 12px;
+}
+
 .nav-btn {
   width: 36px;
 }
@@ -211,6 +228,52 @@ html, body {
   opacity: 0.3;
   cursor: not-allowed;
   background-color: transparent !important;
+}
+
+.copy-url-btn {
+  width: 36px;
+  margin-left: 4px;
+}
+
+.copy-feedback {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #81b64c;
+  margin-left: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+.copy-feedback.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.copy-feedback.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
 }
 
 .zoom-btn {

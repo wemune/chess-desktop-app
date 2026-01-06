@@ -52,6 +52,7 @@ const electronAPI = {
     zoomOut: () => ipcRenderer.send(IPC_CHANNELS.WEBVIEW.ZOOM_OUT),
     zoomReset: () => ipcRenderer.send(IPC_CHANNELS.WEBVIEW.ZOOM_RESET),
     getZoom: () => ipcRenderer.invoke(IPC_CHANNELS.WEBVIEW.GET_ZOOM) as Promise<number>,
+    getUrl: () => ipcRenderer.invoke(IPC_CHANNELS.WEBVIEW.GET_URL) as Promise<string>,
     onLoadStart: (callback: () => void) => {
       const listener = () => callback()
       ipcRenderer.on(IPC_CHANNELS.WEBVIEW.LOAD_START, listener)

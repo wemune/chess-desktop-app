@@ -1,3 +1,5 @@
+import { createElement, FileText, X } from 'lucide'
+
 export class SettingsModal {
   private modal: HTMLElement
   private backdrop: HTMLElement
@@ -20,7 +22,15 @@ export class SettingsModal {
     this.soundMutedToggle = document.getElementById('sound-muted-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
+    this.initializeIcons()
     this.bindEvents()
+  }
+
+  private initializeIcons(): void {
+    const iconSize = { width: 16, height: 16, strokeWidth: 2 }
+
+    this.openLogsBtn.appendChild(createElement(FileText, iconSize))
+    this.closeBtn.appendChild(createElement(X, iconSize))
   }
 
   async init(): Promise<void> {
