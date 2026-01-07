@@ -109,14 +109,10 @@ export class Titlebar {
 
   private async updateMaximizeIcon(isMaximized?: boolean): Promise<void> {
     const maximized = isMaximized ?? await window.electronAPI.window.isMaximized()
-    const controlSize = { width: 12, height: 12, strokeWidth: 2 }
 
-    this.maximizeBtn.innerHTML = ''
     if (maximized) {
-      this.maximizeBtn.appendChild(createElement(Minimize2, controlSize))
       this.maximizeBtn.title = 'Restore'
     } else {
-      this.maximizeBtn.appendChild(createElement(Square, controlSize))
       this.maximizeBtn.title = 'Maximize'
     }
   }
