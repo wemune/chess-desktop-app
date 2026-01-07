@@ -1,9 +1,11 @@
 import { createElement, FileText, X } from 'lucide'
+import { ThemeId } from '../shared/themes'
 
 export class SettingsModal {
   private modal: HTMLElement
   private backdrop: HTMLElement
   private closeBtn: HTMLButtonElement
+  private themeSelect: HTMLSelectElement
   private notificationsToggle: HTMLInputElement
   private chatToggle: HTMLInputElement
   private alwaysOnTopToggle: HTMLInputElement
@@ -15,6 +17,7 @@ export class SettingsModal {
     this.modal = document.getElementById('settings-modal') as HTMLElement
     this.backdrop = this.modal.querySelector('.modal-backdrop') as HTMLElement
     this.closeBtn = document.getElementById('settings-close') as HTMLButtonElement
+    this.themeSelect = document.getElementById('theme-select') as HTMLSelectElement
     this.notificationsToggle = document.getElementById('notifications-toggle') as HTMLInputElement
     this.chatToggle = document.getElementById('chat-toggle') as HTMLInputElement
     this.alwaysOnTopToggle = document.getElementById('always-on-top-toggle') as HTMLInputElement
@@ -35,6 +38,7 @@ export class SettingsModal {
 
   async init(): Promise<void> {
     const settings = await window.electronAPI.settings.get()
+    this.themeSelect.value = settings.theme ?? 'default'
     this.notificationsToggle.checked = settings.notificationsEnabled ?? true
     this.chatToggle.checked = settings.chatEnabled ?? true
     this.alwaysOnTopToggle.checked = settings.alwaysOnTop ?? false
@@ -45,6 +49,12 @@ export class SettingsModal {
   private bindEvents(): void {
     this.closeBtn.addEventListener('click', () => this.close())
     this.backdrop.addEventListener('click', () => this.close())
+
+    this.themeSelect.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        theme: this.themeSelect.value as ThemeId
+      })
+    })
 
     this.notificationsToggle.addEventListener('change', () => {
       window.electronAPI.settings.set({

@@ -194,6 +194,32 @@ input:checked + .toggle-slider:hover {
   background-color: #9acc5f;
 }
 
+.setting-select {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background-color: #272522;
+  color: #e0e0e0;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease;
+  min-width: 120px;
+}
+
+.setting-select:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.setting-select:focus {
+  border-color: #81b64c;
+}
+
+.setting-select option {
+  background-color: #272522;
+  color: #e0e0e0;
+}
+
 .setting-group {
   display: flex;
   flex-direction: column;

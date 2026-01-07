@@ -1,7 +1,7 @@
-import { app, BrowserWindow, screen, shell, dialog } from 'electron'
+import { app, BrowserWindow, screen, shell } from 'electron'
 import { join } from 'path'
 import { store } from './store'
-import { registerIpcHandlers, setChessWebContents } from './ipc-handlers'
+import { registerIpcHandlers, setChessWebContents, applyTheme } from './ipc-handlers'
 import { initAutoUpdater, setMainWindow } from './auto-updater'
 import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
@@ -287,6 +287,9 @@ app.on('web-contents-created', (_event, contents) => {
           log.error('Failed to hide chat on page load:', err)
         })
       }
+
+      const theme = store.get('theme')
+      applyTheme(contents, theme)
     })
 
     contents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {

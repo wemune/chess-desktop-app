@@ -1,4 +1,5 @@
 import Store from 'electron-store'
+import { ThemeId } from '../shared/themes'
 
 export interface WindowConfig {
   width: number
@@ -16,6 +17,7 @@ export interface StoreSchema {
   alwaysOnTop: boolean
   hardwareAcceleration: boolean
   soundMuted: boolean
+  theme: ThemeId
 }
 
 const defaults: StoreSchema = {
@@ -29,7 +31,8 @@ const defaults: StoreSchema = {
   chatEnabled: true,
   alwaysOnTop: false,
   hardwareAcceleration: true,
-  soundMuted: false
+  soundMuted: false,
+  theme: 'default'
 }
 
 export const store = new Store<StoreSchema>({ defaults })

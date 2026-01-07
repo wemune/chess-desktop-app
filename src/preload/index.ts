@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
+import { ThemeId } from '../shared/themes'
 
 export interface StoreSchema {
   window: { width: number; height: number; x?: number; y?: number; isMaximized: boolean }
@@ -9,6 +10,7 @@ export interface StoreSchema {
   alwaysOnTop: boolean
   hardwareAcceleration: boolean
   soundMuted: boolean
+  theme: ThemeId
 }
 
 const electronAPI = {
