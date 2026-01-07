@@ -8,7 +8,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  background-color: #312e2b;
+  background-color: #09090b;
 }
 
 .update-banner {
@@ -106,7 +106,7 @@ html, body {
   display: flex;
   align-items: center;
   height: 38px;
-  background-color: #272522;
+  background-color: #09090b;
   color: #b3b3b3;
   user-select: none;
   position: relative;
@@ -163,7 +163,7 @@ html, body {
   transform: translateX(-50%);
   font-size: 13px;
   font-weight: 500;
-  color: #999;
+  color: #d4d4d4;
   pointer-events: none;
 }
 
@@ -297,9 +297,15 @@ html, body {
   color: #b3b3b3;
 }
 
+.titlebar-divider {
+  width: 1px;
+  height: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  margin: 0 8px;
+}
+
 #settings-btn {
   margin-right: 8px;
-  margin-left: 4px;
 }
 
 body.platform-darwin .window-control {
@@ -334,7 +340,7 @@ body.update-visible #chess-webview {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #312e2b;
+  background-color: #09090b;
   display: flex;
   align-items: center;
   justify-content: center;

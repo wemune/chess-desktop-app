@@ -25,7 +25,7 @@
 
 .modal-content {
   position: relative;
-  background-color: #312e2b;
+  background-color: #09090b;
   border-radius: 8px;
   width: 500px;
   max-width: 90%;
@@ -199,7 +199,7 @@ input:checked + .toggle-slider:hover {
   font-size: 14px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  background-color: #272522;
+  background-color: #09090b;
   color: #e0e0e0;
   cursor: pointer;
   outline: none;
@@ -216,7 +216,7 @@ input:checked + .toggle-slider:hover {
 }
 
 .setting-select option {
-  background-color: #272522;
+  background-color: #09090b;
   color: #e0e0e0;
 }
 
@@ -237,7 +237,7 @@ input:checked + .toggle-slider:hover {
   font-size: 14px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  background-color: #272522;
+  background-color: #09090b;
   color: #e0e0e0;
   cursor: pointer;
   outline: none;
@@ -253,7 +253,7 @@ input:checked + .toggle-slider:hover {
 }
 
 .setting-group select option {
-  background-color: #272522;
+  background-color: #09090b;
   color: #e0e0e0;
   padding: 8px;
 }
