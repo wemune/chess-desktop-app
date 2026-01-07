@@ -9,6 +9,10 @@ files:
   - out/**/*
   - package.json
 
+extraResources:
+  - from: resources/themes
+    to: themes
+
 publish:
   provider: github
   owner: wemune
