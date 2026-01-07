@@ -115,7 +115,6 @@ All settings are automatically saved and persist across app restarts.
 - **Domain Restricted** - Only navigates to Chess.com domains
 - **External Links** - Non-Chess.com links open in your default browser
 - **Privacy First** - No data collection or tracking beyond standard Chess.com usage
-- **Notification Permissions** - Automatically granted for Chess.com only
 
 ## Troubleshooting
 
