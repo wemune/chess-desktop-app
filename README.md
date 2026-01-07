@@ -12,7 +12,7 @@ A modern desktop client for Chess.com with enhanced native features.
 &nbsp;&nbsp;&nbsp;
 [![Download for Linux (DEB)](https://img.shields.io/badge/Download-Linux%20(DEB)-FCC624?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/wemune/chess-desktop-app/releases/latest/download/Chess-Desktop-App-amd64.deb)
 &nbsp;&nbsp;&nbsp;
-[![All Releases](https://img.shields.io/badge/All-Releases-8B5CF6?style=for-the-badge&logo=github)](https://github.com/wemune/chess-desktop-app/releases)
+[![Downloads](https://img.shields.io/github/downloads/wemune/chess-desktop-app/total?style=for-the-badge&logo=icloud&logoColor=white&label=Downloads&color=8B5CF6)](https://github.com/wemune/chess-desktop-app/releases)
 
 ![Chess Desktop App Screenshot](.github/assets/screenshot.jpg)
 
