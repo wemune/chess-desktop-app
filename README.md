@@ -14,7 +14,7 @@ A modern desktop client for Chess.com with enhanced native features.
 &nbsp;&nbsp;&nbsp;
 [![All Releases](https://img.shields.io/badge/All-Releases-8B5CF6?style=for-the-badge&logo=github)](https://github.com/wemune/chess-desktop-app/releases)
 
-![Chess Desktop App Screenshot](.github/assets/screenshot.png)
+![Chess Desktop App Screenshot](.github/assets/screenshot.jpg)
 
 ## Disclaimer
 
