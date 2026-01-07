@@ -1,6 +1,6 @@
 # Chess Desktop App
 
-A modern desktop application for Chess.com with native features and keyboard shortcuts.
+A modern desktop client for Chess.com with enhanced native features.
 
 [![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D4?style=for-the-badge&logo=windows)](https://github.com/wemune/chess-desktop-app/releases/latest/download/Chess-Desktop-App-Setup.exe)
 &nbsp;&nbsp;&nbsp;
@@ -65,15 +65,19 @@ The app will automatically check for updates on startup and notify you when a ne
 ## Features
 
 - **Native Desktop Experience** - Full-featured desktop app for Windows, macOS, and Linux
+- **Custom Themes** - Choose from multiple background themes to personalize your Chess.com experience
 - **Seamless Navigation** - Back/forward buttons and keyboard shortcuts (Alt+Left/Right)
+- **Copy URL** - Quickly copy the current page URL with one-click button and visual feedback
 - **Zoom Controls** - Easily adjust text size with zoom in/out buttons or keyboard shortcuts (Ctrl/Cmd +/-)
 - **Zoom Limits** - Safe zoom range to prevent UI breaking (33% - 250%)
-- **Desktop Notifications** - Receive notifications from Chess.com
-- **Customizable Settings** - Toggle notifications and chat visibility to personalize your experience
-- **Download Support** - Save PGN files and other downloads directly from the app
+- **Desktop Notifications** - Receive notifications from Chess.com (toggle on/off in settings)
+- **Window Management** - Toggle always on top mode to keep app above other windows
+- **Audio Control** - Mute all Chess.com sounds with one toggle
+- **Chat Toggle** - Show or hide the chat component on Chess.com
+- **Hardware Acceleration** - Toggle GPU rendering (requires restart)
 - **Loading Indicators** - Visual feedback during page loads with 30-second timeout
 - **Error Handling** - Graceful error recovery with retry functionality
-- **Persistent Settings** - Remembers your window size, position, zoom level, and preferences
+- **Persistent Settings** - Remembers your window size, position, zoom level, theme, and all preferences
 - **Auto-Updates** - Automatically downloads updates and installs on restart
 - **Logging** - Detailed logs for troubleshooting with quick access button in settings
 
@@ -88,13 +92,30 @@ The app will automatically check for updates on startup and notify you when a ne
 
 **Note:** You can also click the zoom percentage display to quickly reset to 100%.
 
+## Settings
+
+Access settings by clicking the gear icon in the titlebar. Available options:
+
+### General
+- **Theme** - Select from multiple background themes
+- **Chat** - Show or hide the Chess.com chat component
+- **Mute All Sounds** - Disable all audio from Chess.com
+- **Notifications** - Enable or disable desktop notifications from Chess.com
+
+### Window
+- **Always on Top** - Keep the app window above all other windows
+
+### Advanced
+- **Hardware Acceleration** - Enable or disable GPU rendering (requires app restart)
+
+All settings are automatically saved and persist across app restarts.
+
 ## Security & Privacy
 
 - **Domain Restricted** - Only navigates to Chess.com domains
 - **External Links** - Non-Chess.com links open in your default browser
 - **Privacy First** - No data collection or tracking beyond standard Chess.com usage
 - **Notification Permissions** - Automatically granted for Chess.com only
-- **Production Security** - DevTools disabled in production builds
 
 ## Troubleshooting
 
