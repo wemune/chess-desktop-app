@@ -88,6 +88,22 @@
   padding: 24px;
   max-height: 600px;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #81b64c rgba(255, 255, 255, 0.05);
+}
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #81b64c;
+  border-radius: 4px;
 }
 
 .settings-section {

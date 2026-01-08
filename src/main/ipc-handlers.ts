@@ -8,6 +8,7 @@ import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '..
 import { IPC_CHANNELS } from '../shared/ipc-channels'
 import { CHESS_SELECTORS, buildHideCSS, buildShowCSS } from '../shared/chess-selectors'
 import { THEMES, ThemeId, buildThemeCSS } from '../shared/themes'
+import { initializeDiscordRPC, destroyDiscordRPC } from './discord-rpc'
 
 let chessWebContents: WebContents | null = null
 
@@ -172,6 +173,21 @@ export function registerIpcHandlers(): void {
         }
       } else {
         log.warn('Invalid theme setting received:', settings.theme)
+      }
+    }
+
+    if (settings.discordRpcEnabled !== undefined) {
+      if (typeof settings.discordRpcEnabled === 'boolean') {
+        store.set('discordRpcEnabled', settings.discordRpcEnabled)
+        log.info('Discord RPC setting updated:', settings.discordRpcEnabled)
+
+        if (settings.discordRpcEnabled) {
+          initializeDiscordRPC()
+        } else {
+          destroyDiscordRPC()
+        }
+      } else {
+        log.warn('Invalid discordRpcEnabled setting received:', settings.discordRpcEnabled)
       }
     }
   })

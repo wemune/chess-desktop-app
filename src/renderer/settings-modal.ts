@@ -11,6 +11,7 @@ export class SettingsModal {
   private alwaysOnTopToggle: HTMLInputElement
   private hardwareAccelerationToggle: HTMLInputElement
   private soundMutedToggle: HTMLInputElement
+  private discordRpcToggle: HTMLInputElement
   private openLogsBtn: HTMLButtonElement
 
   constructor() {
@@ -23,6 +24,7 @@ export class SettingsModal {
     this.alwaysOnTopToggle = document.getElementById('always-on-top-toggle') as HTMLInputElement
     this.hardwareAccelerationToggle = document.getElementById('hardware-acceleration-toggle') as HTMLInputElement
     this.soundMutedToggle = document.getElementById('sound-muted-toggle') as HTMLInputElement
+    this.discordRpcToggle = document.getElementById('discord-rpc-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
     this.initializeIcons()
@@ -44,6 +46,7 @@ export class SettingsModal {
     this.alwaysOnTopToggle.checked = settings.alwaysOnTop ?? false
     this.hardwareAccelerationToggle.checked = settings.hardwareAcceleration ?? true
     this.soundMutedToggle.checked = settings.soundMuted ?? false
+    this.discordRpcToggle.checked = settings.discordRpcEnabled ?? true
   }
 
   private bindEvents(): void {
@@ -84,6 +87,12 @@ export class SettingsModal {
     this.soundMutedToggle.addEventListener('change', () => {
       window.electronAPI.settings.set({
         soundMuted: this.soundMutedToggle.checked
+      })
+    })
+
+    this.discordRpcToggle.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        discordRpcEnabled: this.discordRpcToggle.checked
       })
     })
 

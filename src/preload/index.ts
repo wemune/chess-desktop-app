@@ -11,6 +11,7 @@ export interface StoreSchema {
   hardwareAcceleration: boolean
   soundMuted: boolean
   theme: ThemeId
+  discordRpcEnabled: boolean
 }
 
 const electronAPI = {

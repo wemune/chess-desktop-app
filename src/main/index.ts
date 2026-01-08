@@ -7,6 +7,7 @@ import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
 import { CHESS_SELECTORS, buildHideCSS } from '../shared/chess-selectors'
+import { initializeDiscordRPC, destroyDiscordRPC } from './discord-rpc'
 
 log.transports.file.level = process.env.NODE_ENV === 'development' ? 'debug' : 'info'
 log.transports.console.level = process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
@@ -154,6 +155,11 @@ app.whenReady().then(() => {
   createWindow()
   initAutoUpdater()
 
+  const discordRpcEnabled = store.get('discordRpcEnabled')
+  if (discordRpcEnabled) {
+    initializeDiscordRPC()
+  }
+
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
@@ -162,6 +168,7 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
+  destroyDiscordRPC()
   if (process.platform !== 'darwin') {
     app.quit()
   }
