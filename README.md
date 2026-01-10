@@ -75,6 +75,7 @@ The app will automatically check for updates on startup and notify you when a ne
 - **Window Management** - Toggle always on top mode to keep app above other windows
 - **Audio Control** - Mute all Chess.com sounds with one toggle
 - **Chat Toggle** - Show or hide the chat component on Chess.com
+- **Hide Ratings** - Hide all player ratings across Chess.com for a distraction-free experience
 - **Hardware Acceleration** - Toggle GPU rendering (requires restart)
 - **Loading Indicators** - Visual feedback during page loads with 30-second timeout
 - **Error Handling** - Graceful error recovery with retry functionality
@@ -103,6 +104,7 @@ Access settings by clicking the gear icon in the titlebar. Available options:
 - **Mute All Sounds** - Disable all audio from Chess.com
 - **Notifications** - Enable or disable desktop notifications from Chess.com
 - **Discord Rich Presence** - Show your Chess.com activity on Discord
+- **Hide Ratings** - Hide all player ratings across Chess.com
 
 ### Window
 - **Always on Top** - Keep the app window above all other windows
