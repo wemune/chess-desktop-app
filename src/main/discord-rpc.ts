@@ -28,15 +28,16 @@ export async function initializeDiscordRPC(): Promise<void> {
 
     rpcClient = new Client({ clientId: CLIENT_ID })
 
-    rpcClient.on('ready', () => {
+    rpcClient.on('ready', async () => {
       log.info('Discord RPC connected')
       isConnected = true
-      setActivity()
+      await setActivity()
     })
 
     rpcClient.on('disconnected', () => {
       log.info('Discord RPC disconnected')
       isConnected = false
+      stopPolling()
     })
 
     await rpcClient.login()
@@ -97,6 +98,10 @@ async function detectGameState(): Promise<GameInfo> {
           return { mode: 'vs-computer' };
         }
 
+        if (url.startsWith('/analysis/game/')) {
+          return { mode: 'analyzing' };
+        }
+
         if (url.startsWith('/events/')) {
           const hasChessBoard = !!document.querySelector('[class*="board"]');
 
@@ -130,18 +135,20 @@ async function detectGameState(): Promise<GameInfo> {
           const hasDrawButton = !!document.querySelector('[class*="draw-button"]');
           const hasRematchButton = !!document.querySelector('[class*="rematch"]');
           const hasNewGameButton = !!document.querySelector('[class*="new-game"]');
+          const hasGameOverModal = !!document.querySelector('[class*="game-over"]');
+          const hasPlayAgainButton = !!document.querySelector('[class*="play-again"]');
 
           let mode = 'browsing';
 
           if (isEndedGame) {
             mode = 'analyzing';
           } else if (isActiveGame) {
-            if (hasRematchButton || hasNewGameButton) {
+            if (hasRematchButton || hasNewGameButton || hasGameOverModal || hasPlayAgainButton) {
               mode = 'analyzing';
             } else if (hasResignButton || hasDrawButton) {
               mode = 'playing';
             } else {
-              mode = 'spectating';
+              mode = 'analyzing';
             }
           }
 
@@ -221,7 +228,7 @@ function parseGameMode(timeControl: string | undefined): string {
   return 'Classical'
 }
 
-function updateActivity(gameInfo: GameInfo): void {
+async function updateActivity(gameInfo: GameInfo): Promise<void> {
   if (!rpcClient || !isConnected) {
     return
   }
@@ -255,7 +262,7 @@ function updateActivity(gameInfo: GameInfo): void {
       state = 'Practicing'
     }
 
-    rpcClient.user?.setActivity({
+    await rpcClient.user?.setActivity({
       state,
       details,
       largeImageKey: 'chess_logo',
@@ -267,17 +274,23 @@ function updateActivity(gameInfo: GameInfo): void {
       startTimestamp
     })
   } catch (err) {
-    log.error('Failed to update Discord activity:', err)
+    if (err instanceof Error && err.message.includes('CONNECTION_ENDED')) {
+      log.info('Discord connection ended, stopping activity updates')
+      isConnected = false
+      stopPolling()
+    } else {
+      log.error('Failed to update Discord activity:', err)
+    }
   }
 }
 
-export function setActivity(): void {
+export async function setActivity(): Promise<void> {
   if (!rpcClient || !isConnected) {
     log.warn('Cannot set activity: RPC not connected')
     return
   }
 
-  updateActivity({ mode: 'browsing' })
+  await updateActivity({ mode: 'browsing' })
   startPolling()
 }
 
@@ -295,11 +308,19 @@ function startPolling(): void {
   stopPolling()
 
   pollingInterval = setInterval(async () => {
+    if (!isConnected) {
+      stopPolling()
+      return
+    }
     const gameInfo = await detectGameState()
-    updateActivity(gameInfo)
+    await updateActivity(gameInfo)
   }, 1000)
 
-  detectGameState().then(updateActivity)
+  detectGameState().then(async (gameInfo) => {
+    if (isConnected) {
+      await updateActivity(gameInfo)
+    }
+  })
 }
 
 function stopPolling(): void {
