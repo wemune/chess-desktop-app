@@ -24,6 +24,11 @@ export const THEMES: Record<string, Theme> = {
     id: 'nebula',
     name: 'Nebula',
     backgroundImagePath: 'nebula.jpeg'
+  },
+  tundra: {
+    id: 'tundra',
+    name: 'Tundra',
+    backgroundImagePath: 'tundra.jpeg'
   }
 }
 
