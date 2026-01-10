@@ -7,7 +7,7 @@ import log from 'electron-log'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
 import { CHESS_SELECTORS, buildHideCSS } from '../shared/chess-selectors'
-import { initializeDiscordRPC, destroyDiscordRPC } from './discord-rpc'
+import { initializeDiscordRPC, destroyDiscordRPC, setDiscordWebContents } from './discord-rpc'
 
 log.transports.file.level = process.env.NODE_ENV === 'development' ? 'debug' : 'info'
 log.transports.console.level = process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
@@ -177,6 +177,7 @@ app.on('window-all-closed', () => {
 app.on('web-contents-created', (_event, contents) => {
   if (contents.getType() === 'webview') {
     setChessWebContents(contents)
+    setDiscordWebContents(contents)
     contents.setUserAgent(getUserAgent())
 
     const savedZoom = store.get('zoomLevel')
