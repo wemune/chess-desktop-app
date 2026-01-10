@@ -65,7 +65,7 @@ The app will automatically check for updates on startup and notify you when a ne
 ## Features
 
 - **Native Desktop Experience** - Full-featured desktop app for Windows, macOS, and Linux
-- **Discord Rich Presence** - Show your friends on Discord that you are playing Chess (toggle on/off in settings)
+- **Discord Rich Presence** - Show detailed dynamic Chess.com activity on Discord (toggle on/off in settings)
 - **Custom Themes** - Choose from multiple background themes to personalize your Chess.com experience
 - **Seamless Navigation** - Back/forward buttons and keyboard shortcuts (Alt+Left/Right)
 - **Copy URL** - Quickly copy the current page URL with one-click button and visual feedback
