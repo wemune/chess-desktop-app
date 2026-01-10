@@ -12,6 +12,7 @@ export class SettingsModal {
   private hardwareAccelerationToggle: HTMLInputElement
   private soundMutedToggle: HTMLInputElement
   private discordRpcToggle: HTMLInputElement
+  private hideRatingsToggle: HTMLInputElement
   private openLogsBtn: HTMLButtonElement
 
   constructor() {
@@ -25,6 +26,7 @@ export class SettingsModal {
     this.hardwareAccelerationToggle = document.getElementById('hardware-acceleration-toggle') as HTMLInputElement
     this.soundMutedToggle = document.getElementById('sound-muted-toggle') as HTMLInputElement
     this.discordRpcToggle = document.getElementById('discord-rpc-toggle') as HTMLInputElement
+    this.hideRatingsToggle = document.getElementById('hide-ratings-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
 
     this.initializeIcons()
@@ -47,6 +49,7 @@ export class SettingsModal {
     this.hardwareAccelerationToggle.checked = settings.hardwareAcceleration ?? true
     this.soundMutedToggle.checked = settings.soundMuted ?? false
     this.discordRpcToggle.checked = settings.discordRpcEnabled ?? true
+    this.hideRatingsToggle.checked = settings.hideRatings ?? false
   }
 
   private bindEvents(): void {
@@ -93,6 +96,12 @@ export class SettingsModal {
     this.discordRpcToggle.addEventListener('change', () => {
       window.electronAPI.settings.set({
         discordRpcEnabled: this.discordRpcToggle.checked
+      })
+    })
+
+    this.hideRatingsToggle.addEventListener('change', () => {
+      window.electronAPI.settings.set({
+        hideRatings: this.hideRatingsToggle.checked
       })
     })
 

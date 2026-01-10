@@ -12,6 +12,7 @@ export interface StoreSchema {
   soundMuted: boolean
   theme: ThemeId
   discordRpcEnabled: boolean
+  hideRatings: boolean
 }
 
 const electronAPI = {

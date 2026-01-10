@@ -19,6 +19,7 @@ export interface StoreSchema {
   soundMuted: boolean
   theme: ThemeId
   discordRpcEnabled: boolean
+  hideRatings: boolean
 }
 
 const defaults: StoreSchema = {
@@ -34,7 +35,8 @@ const defaults: StoreSchema = {
   hardwareAcceleration: true,
   soundMuted: false,
   theme: 'default',
-  discordRpcEnabled: true
+  discordRpcEnabled: true,
+  hideRatings: false
 }
 
 export const store = new Store<StoreSchema>({ defaults })

@@ -296,6 +296,13 @@ app.on('web-contents-created', (_event, contents) => {
         })
       }
 
+      const hideRatings = store.get('hideRatings')
+      if (hideRatings) {
+        contents.insertCSS(buildHideCSS(CHESS_SELECTORS.RATINGS)).catch((err) => {
+          log.error('Failed to hide ratings on page load:', err)
+        })
+      }
+
       const theme = store.get('theme')
       applyTheme(contents, theme)
     })

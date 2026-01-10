@@ -126,6 +126,25 @@ export function registerIpcHandlers(): void {
       }
     }
 
+    if (settings.hideRatings !== undefined) {
+      if (typeof settings.hideRatings === 'boolean') {
+        store.set('hideRatings', settings.hideRatings)
+        log.info('Hide ratings setting updated:', settings.hideRatings)
+
+        if (chessWebContents) {
+          const cssCode = settings.hideRatings
+            ? buildHideCSS(CHESS_SELECTORS.RATINGS)
+            : buildShowCSS(CHESS_SELECTORS.RATINGS)
+
+          chessWebContents.insertCSS(cssCode).catch((err) => {
+            log.error('Failed to toggle ratings visibility:', err)
+          })
+        }
+      } else {
+        log.warn('Invalid hideRatings setting received:', settings.hideRatings)
+      }
+    }
+
     if (settings.alwaysOnTop !== undefined) {
       if (typeof settings.alwaysOnTop === 'boolean') {
         store.set('alwaysOnTop', settings.alwaysOnTop)
