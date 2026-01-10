@@ -232,9 +232,9 @@ function updateActivity(gameInfo: GameInfo): void {
 
     if (gameInfo.mode === 'playing') {
       const gameMode = parseGameMode(gameInfo.timeControl)
-      state = `Playing ${gameMode}`
+      details = `Playing ${gameMode}`
       if (gameInfo.opponent) {
-        details = `vs ${gameInfo.opponent}`
+        state = `vs ${gameInfo.opponent}`
       }
     } else if (gameInfo.mode === 'vs-computer') {
       state = 'Playing vs Computer'
