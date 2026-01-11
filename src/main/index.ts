@@ -1,13 +1,11 @@
-import { app, BrowserWindow, screen, shell } from 'electron'
-import { join } from 'path'
-import { store } from './store'
-import { registerIpcHandlers, setChessWebContents, applyTheme } from './ipc-handlers'
-import { initAutoUpdater, setMainWindow } from './auto-updater'
+import { app, BrowserWindow } from 'electron'
 import log from 'electron-log'
-import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
-import { IPC_CHANNELS } from '../shared/ipc-channels'
-import { CHESS_SELECTORS, buildHideCSS } from '../shared/chess-selectors'
-import { initializeDiscordRPC, destroyDiscordRPC, setDiscordWebContents } from './discord-rpc'
+import { store } from './store'
+import { registerIpcHandlers } from './ipc'
+import { initAutoUpdater, setMainWindow } from './auto-updater'
+import { initializeDiscordRPC, destroyDiscordRPC } from './discord-rpc'
+import { createMainWindow, getUserAgent } from './window'
+import { configureWebviewContents } from './webview'
 
 log.transports.file.level = process.env.NODE_ENV === 'development' ? 'debug' : 'info'
 log.transports.console.level = process.env.NODE_ENV === 'development' ? 'debug' : 'warn'
@@ -24,157 +22,16 @@ if (process.platform === 'win32') {
 
 let mainWindow: BrowserWindow | null = null
 
-const getUserAgent = (): string => {
-  const chromeVersion = process.versions.chrome
-  if (process.platform === 'darwin') {
-    return `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36`
-  } else if (process.platform === 'linux') {
-    return `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36`
-  }
-  return `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36`
-}
-
-const isChessDotComURL = (url: string): boolean => {
-  try {
-    const urlObj = new URL(url)
-    const validHostname = urlObj.hostname === 'www.chess.com' || urlObj.hostname === 'chess.com'
-    return validHostname && urlObj.protocol === 'https:'
-  } catch {
-    return false
-  }
-}
-
-const allowedExternalProtocols = new Set(['https:', 'http:', 'mailto:'])
-
-const isAllowedExternalURL = (url: string): boolean => {
-  try {
-    const urlObj = new URL(url)
-    return allowedExternalProtocols.has(urlObj.protocol)
-  } catch {
-    return false
-  }
-}
-
-const openExternalURL = (url: string): void => {
-  if (!isAllowedExternalURL(url)) {
-    log.warn('Blocked external URL with unsupported protocol:', url)
-    return
-  }
-
-  shell.openExternal(url).catch((err) => {
-    log.error('Failed to open external URL:', err)
-  })
-}
-
 app.userAgentFallback = getUserAgent()
 
-function createWindow(): void {
-  const windowConfig = store.get('window')
-  const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize
-
-  const width = Math.min(windowConfig.width, screenWidth)
-  const height = Math.min(windowConfig.height, screenHeight)
-
-  let x = windowConfig.x !== undefined ? windowConfig.x : Math.floor((screenWidth - width) / 2)
-  let y = windowConfig.y !== undefined ? windowConfig.y : Math.floor((screenHeight - height) / 2)
-
-  if (x < 0 || x + width > screenWidth) {
-    x = Math.floor((screenWidth - width) / 2)
-  }
-  if (y < 0 || y + height > screenHeight) {
-    y = Math.floor((screenHeight - height) / 2)
-  }
-
-  const isMac = process.platform === 'darwin'
-  const isLinux = process.platform === 'linux'
-  const iconExt = isMac ? 'icon.icns' : isLinux ? 'icon.png' : 'icon.ico'
-  const iconPath = process.env.NODE_ENV === 'development'
-    ? join(__dirname, '../../resources', iconExt)
-    : join(process.resourcesPath, iconExt)
-
-  mainWindow = new BrowserWindow({
-    width,
-    height,
-    x,
-    y,
-    minWidth: 800,
-    minHeight: 600,
-    frame: false,
-    titleBarStyle: isMac ? 'hiddenInset' : 'hidden',
-    trafficLightPosition: isMac ? { x: 15, y: 12 } : undefined,
-    backgroundColor: '#312e2b',
-    icon: iconPath,
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.mjs'),
-      webviewTag: true,
-      contextIsolation: true,
-      sandbox: false,
-      devTools: process.env.NODE_ENV === 'development'
-    }
-  })
-
-  if (windowConfig.isMaximized) {
-    mainWindow.maximize()
-  }
-
-  const alwaysOnTop = store.get('alwaysOnTop')
-  mainWindow.setAlwaysOnTop(alwaysOnTop)
-
-  mainWindow.on('maximize', () => {
-    mainWindow?.webContents.send(IPC_CHANNELS.WINDOW.MAXIMIZE_CHANGE, true)
-  })
-
-  mainWindow.on('unmaximize', () => {
-    mainWindow?.webContents.send(IPC_CHANNELS.WINDOW.MAXIMIZE_CHANGE, false)
-  })
-
-  mainWindow.on('close', () => {
-    if (mainWindow) {
-      const bounds = mainWindow.getBounds()
-      store.set('window', {
-        width: bounds.width,
-        height: bounds.height,
-        x: bounds.x,
-        y: bounds.y,
-        isMaximized: mainWindow.isMaximized()
-      })
-    }
-  })
-
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:5173')
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
-
-  mainWindow.webContents.on('did-finish-load', () => {
-    mainWindow?.webContents.send('platform', process.platform)
-  })
-
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.on('before-input-event', (event, input) => {
-      if (input.type !== 'keyDown') return
-
-      const isMac = process.platform === 'darwin'
-      const modifier = isMac ? input.meta : input.control
-
-      if (modifier && input.shift && input.key.toLowerCase() === 'i') {
-        event.preventDefault()
-        if (mainWindow?.webContents.isDevToolsOpened()) {
-          mainWindow.webContents.closeDevTools()
-        } else {
-          mainWindow?.webContents.openDevTools()
-        }
-      }
-    })
-  }
-
+const createAppWindow = (): void => {
+  mainWindow = createMainWindow()
   setMainWindow(mainWindow)
 }
 
 app.whenReady().then(() => {
   registerIpcHandlers()
-  createWindow()
+  createAppWindow()
   initAutoUpdater()
 
   const discordRpcEnabled = store.get('discordRpcEnabled')
@@ -184,7 +41,7 @@ app.whenReady().then(() => {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+      createAppWindow()
     }
   })
 })
@@ -197,142 +54,5 @@ app.on('window-all-closed', () => {
 })
 
 app.on('web-contents-created', (_event, contents) => {
-  if (contents.getType() === 'webview') {
-    setChessWebContents(contents)
-    setDiscordWebContents(contents)
-    contents.setUserAgent(getUserAgent())
-
-    const savedZoom = store.get('zoomLevel')
-    contents.setZoomLevel(savedZoom)
-
-    const soundMuted = store.get('soundMuted')
-    contents.setAudioMuted(soundMuted)
-
-    contents.on('before-input-event', (event, input) => {
-      if (input.type !== 'keyDown') return
-
-      const isMac = process.platform === 'darwin'
-      const modifier = isMac ? input.meta : input.control
-
-      if (process.env.NODE_ENV === 'development' && input.key === 'F12') {
-        event.preventDefault()
-        if (contents.isDevToolsOpened()) {
-          contents.closeDevTools()
-        } else {
-          contents.openDevTools()
-        }
-      }
-
-      if ((modifier && input.key.toLowerCase() === 'r') || input.key === 'F5') {
-        event.preventDefault()
-        contents.reload()
-      }
-
-      if (input.alt && input.key === 'ArrowLeft') {
-        event.preventDefault()
-        if (contents.navigationHistory.canGoBack()) {
-          contents.navigationHistory.goBack()
-        }
-      }
-
-      if (input.alt && input.key === 'ArrowRight') {
-        event.preventDefault()
-        if (contents.navigationHistory.canGoForward()) {
-          contents.navigationHistory.goForward()
-        }
-      }
-
-      if (modifier && (input.key === '=' || input.key === '+')) {
-        event.preventDefault()
-        const currentZoom = contents.getZoomLevel()
-        const currentIndex = getClosestZoomIndex(currentZoom)
-        const nextIndex = Math.min(currentIndex + 1, ZOOM_PERCENTAGES.length - 1)
-        const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[nextIndex])
-        contents.setZoomLevel(newZoom)
-        store.set('zoomLevel', newZoom)
-      }
-
-      if (modifier && (input.key === '-' || input.key === '_')) {
-        event.preventDefault()
-        const currentZoom = contents.getZoomLevel()
-        const currentIndex = getClosestZoomIndex(currentZoom)
-        const prevIndex = Math.max(currentIndex - 1, 0)
-        const newZoom = percentageToZoomLevel(ZOOM_PERCENTAGES[prevIndex])
-        contents.setZoomLevel(newZoom)
-        store.set('zoomLevel', newZoom)
-      }
-
-      if (modifier && input.key === '0') {
-        event.preventDefault()
-        contents.setZoomLevel(0)
-        store.set('zoomLevel', 0)
-      }
-    })
-
-    contents.session.setPermissionRequestHandler((webContents, permission, callback) => {
-      if (permission === 'notifications' && isChessDotComURL(webContents.getURL())) {
-        const notificationsEnabled = store.get('notificationsEnabled')
-        if (notificationsEnabled) {
-          log.info('Granting notification permission to chess.com')
-          callback(true)
-        } else {
-          log.info('Denying notification permission (disabled in settings)')
-          callback(false)
-        }
-      } else {
-        log.warn('Denying permission request:', permission)
-        callback(false)
-      }
-    })
-
-    contents.setWindowOpenHandler(({ url }) => {
-      log.info('[WindowOpenHandler] Popup requested:', url)
-      if (isChessDotComURL(url)) {
-        log.info('[WindowOpenHandler] Loading chess.com URL in webview')
-        contents.loadURL(url)
-      } else {
-        log.info('[WindowOpenHandler] Opening external URL')
-        openExternalURL(url)
-      }
-      return { action: 'deny' }
-    })
-
-    contents.on('will-navigate', (event, url) => {
-      if (!isChessDotComURL(url)) {
-        event.preventDefault()
-        openExternalURL(url)
-      }
-    })
-
-    contents.on('did-start-loading', () => {
-      mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_START)
-    })
-
-    contents.on('did-stop-loading', () => {
-      mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_STOP)
-
-      const chatEnabled = store.get('chatEnabled')
-      if (!chatEnabled) {
-        contents.insertCSS(buildHideCSS(CHESS_SELECTORS.CHAT)).catch((err) => {
-          log.error('Failed to hide chat on page load:', err)
-        })
-      }
-
-      const hideRatings = store.get('hideRatings')
-      if (hideRatings) {
-        contents.insertCSS(buildHideCSS(CHESS_SELECTORS.RATINGS)).catch((err) => {
-          log.error('Failed to hide ratings on page load:', err)
-        })
-      }
-
-      const theme = store.get('theme')
-      applyTheme(contents, theme)
-    })
-
-    contents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
-      if (errorCode !== -3) {
-        mainWindow?.webContents.send(IPC_CHANNELS.WEBVIEW.LOAD_ERROR, { errorCode, errorDescription, validatedURL })
-      }
-    })
-  }
+  configureWebviewContents(contents, mainWindow)
 })

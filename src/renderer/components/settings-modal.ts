@@ -1,5 +1,5 @@
 import { createElement, FileText, X } from 'lucide'
-import { ThemeId } from '../shared/themes'
+import { ThemeId } from '../../shared/themes'
 
 export class SettingsModal {
   private modal: HTMLElement

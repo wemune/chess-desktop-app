@@ -1,4 +1,4 @@
-import { zoomLevelToPercentage } from '../shared/constants'
+import { zoomLevelToPercentage } from '../../shared/constants'
 import { createElement, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Settings, Minus, Square, Minimize2, X, Copy, CopyCheck } from 'lucide'
 import log from 'electron-log/renderer'
 

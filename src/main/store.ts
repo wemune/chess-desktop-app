@@ -1,26 +1,5 @@
 import Store from 'electron-store'
-import { ThemeId } from '../shared/themes'
-
-export interface WindowConfig {
-  width: number
-  height: number
-  x?: number
-  y?: number
-  isMaximized: boolean
-}
-
-export interface StoreSchema {
-  window: WindowConfig
-  zoomLevel: number
-  notificationsEnabled: boolean
-  chatEnabled: boolean
-  alwaysOnTop: boolean
-  hardwareAcceleration: boolean
-  soundMuted: boolean
-  theme: ThemeId
-  discordRpcEnabled: boolean
-  hideRatings: boolean
-}
+import { StoreSchema } from '../shared/store'
 
 const defaults: StoreSchema = {
   window: {

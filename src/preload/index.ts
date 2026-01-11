@@ -1,19 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC_CHANNELS } from '../shared/ipc-channels'
-import { ThemeId } from '../shared/themes'
-
-export interface StoreSchema {
-  window: { width: number; height: number; x?: number; y?: number; isMaximized: boolean }
-  zoomLevel: number
-  notificationsEnabled: boolean
-  chatEnabled: boolean
-  alwaysOnTop: boolean
-  hardwareAcceleration: boolean
-  soundMuted: boolean
-  theme: ThemeId
-  discordRpcEnabled: boolean
-  hideRatings: boolean
-}
+import { StoreSchema } from '../shared/store'
 
 const electronAPI = {
   window: {
