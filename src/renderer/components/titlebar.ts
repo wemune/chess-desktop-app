@@ -1,5 +1,5 @@
 import { zoomLevelToPercentage } from '../../shared/constants'
-import { createElement, ArrowLeft, ArrowRight, ZoomIn, ZoomOut, Settings, Minus, Square, Minimize2, X, Copy, CopyCheck } from 'lucide'
+import { createElement, ArrowLeft, ArrowRight, RotateCw, ZoomIn, ZoomOut, Settings, Minus, Square, Minimize2, X, Copy, CopyCheck } from 'lucide'
 import log from 'electron-log/renderer'
 
 export class Titlebar {
@@ -9,6 +9,7 @@ export class Titlebar {
   private settingsBtn: HTMLButtonElement
   private navBackBtn: HTMLButtonElement
   private navForwardBtn: HTMLButtonElement
+  private refreshBtn: HTMLButtonElement
   private copyUrlBtn: HTMLButtonElement
   private copyFeedback: HTMLElement
   private zoomInBtn: HTMLButtonElement
@@ -23,6 +24,7 @@ export class Titlebar {
     this.settingsBtn = document.getElementById('settings-btn') as HTMLButtonElement
     this.navBackBtn = document.getElementById('nav-back') as HTMLButtonElement
     this.navForwardBtn = document.getElementById('nav-forward') as HTMLButtonElement
+    this.refreshBtn = document.getElementById('refresh-btn') as HTMLButtonElement
     this.copyUrlBtn = document.getElementById('copy-url-btn') as HTMLButtonElement
     this.copyFeedback = document.getElementById('copy-feedback') as HTMLElement
     this.zoomInBtn = document.getElementById('zoom-in') as HTMLButtonElement
@@ -42,6 +44,7 @@ export class Titlebar {
 
     this.navBackBtn.appendChild(createElement(ArrowLeft, iconSize))
     this.navForwardBtn.appendChild(createElement(ArrowRight, iconSize))
+    this.refreshBtn.appendChild(createElement(RotateCw, iconSize))
     this.copyUrlBtn.appendChild(createElement(Copy, iconSize))
     this.zoomInBtn.appendChild(createElement(ZoomIn, iconSize))
     this.zoomOutBtn.appendChild(createElement(ZoomOut, iconSize))
@@ -76,6 +79,10 @@ export class Titlebar {
     this.navForwardBtn.addEventListener('click', async () => {
       window.electronAPI.webview.goForward()
       setTimeout(() => this.updateNavigationButtons(), 100)
+    })
+
+    this.refreshBtn.addEventListener('click', () => {
+      window.electronAPI.webview.reload()
     })
 
     this.copyUrlBtn.addEventListener('click', async () => {
