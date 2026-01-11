@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
+    "lint": "biome check .",
     "preview": "electron-vite preview",
     "package": "electron-vite build && electron-builder",
     "package:win": "electron-vite build && electron-builder --win",
@@ -29,6 +30,7 @@
   "license": "MIT",
   "type": "module",
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "electron": "^39.2.7",
     "electron-builder": "^26.0.12",
     "electron-vite": "^5.0.0",
