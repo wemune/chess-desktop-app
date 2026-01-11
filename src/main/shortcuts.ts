@@ -1,13 +1,79 @@
 import { BrowserWindow, WebContents } from 'electron'
 import { store } from './store'
+import { getChessWebContents } from './ipc/webview'
 import { ZOOM_PERCENTAGES, percentageToZoomLevel, getClosestZoomIndex } from '../shared/constants'
 
+function navigateBack(contents: WebContents | null): void {
+  if (!contents) return
+  if (contents.navigationHistory.canGoBack()) {
+    contents.navigationHistory.goBack()
+  }
+}
+
+function navigateForward(contents: WebContents | null): void {
+  if (!contents) return
+  if (contents.navigationHistory.canGoForward()) {
+    contents.navigationHistory.goForward()
+  }
+}
+
+function handleMouseNavigation(inputEvent: Electron.Event, input: Electron.Input, contents: WebContents | null): boolean {
+  if (input.type !== 'mouseDown' && input.type !== 'mouseUp') {
+    return false
+  }
+
+  const pointerInput = input as unknown as { button?: number | string; buttons?: number }
+  const button = pointerInput.button
+  const buttons = typeof pointerInput.buttons === 'number' ? pointerInput.buttons : 0
+  const isBackButton = button === 'back' || button === 3 || (buttons & 8) === 8
+  const isForwardButton = button === 'forward' || button === 4 || (buttons & 16) === 16
+
+  if (isBackButton) {
+    inputEvent.preventDefault()
+    navigateBack(contents)
+    return true
+  }
+
+  if (isForwardButton) {
+    inputEvent.preventDefault()
+    navigateForward(contents)
+    return true
+  }
+
+  return false
+}
+
 export function registerMainWindowShortcuts(window: BrowserWindow): void {
+  const handleAppCommand = (event: Electron.Event, command: string): void => {
+    const chessContents = getChessWebContents()
+    if (command === 'browser-backward') {
+      event.preventDefault()
+      navigateBack(chessContents)
+      return
+    }
+
+    if (command === 'browser-forward') {
+      event.preventDefault()
+      navigateForward(chessContents)
+    }
+  }
+
+  window.on('app-command', handleAppCommand)
+  window.webContents.on('app-command' as any, handleAppCommand)
+
   if (process.env.NODE_ENV !== 'development') {
     return
   }
 
   window.webContents.on('before-input-event', (inputEvent, input) => {
+    if (handleMouseNavigation(inputEvent, input, getChessWebContents())) {
+      return
+    }
+
+    if (process.env.NODE_ENV !== 'development') {
+      return
+    }
+
     if (input.type !== 'keyDown') return
 
     const isMac = process.platform === 'darwin'
@@ -25,7 +91,24 @@ export function registerMainWindowShortcuts(window: BrowserWindow): void {
 }
 
 export function registerWebviewShortcuts(contents: WebContents): void {
+  contents.on('app-command' as any, (appEvent: Electron.Event, command: string) => {
+    if (command === 'browser-backward') {
+      appEvent.preventDefault()
+      navigateBack(contents)
+      return
+    }
+
+    if (command === 'browser-forward') {
+      appEvent.preventDefault()
+      navigateForward(contents)
+    }
+  })
+
   contents.on('before-input-event', (inputEvent, input) => {
+    if (handleMouseNavigation(inputEvent, input, contents)) {
+      return
+    }
+
     if (input.type !== 'keyDown') return
 
     const isMac = process.platform === 'darwin'
