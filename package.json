@@ -1,7 +1,7 @@
 {
   "name": "chess-desktop-app",
   "productName": "Chess Desktop App",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Desktop application for Chess.com",
   "main": "./out/main/index.js",
   "scripts": {
