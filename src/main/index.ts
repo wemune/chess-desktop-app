@@ -44,6 +44,28 @@ const isChessDotComURL = (url: string): boolean => {
   }
 }
 
+const allowedExternalProtocols = new Set(['https:', 'http:', 'mailto:'])
+
+const isAllowedExternalURL = (url: string): boolean => {
+  try {
+    const urlObj = new URL(url)
+    return allowedExternalProtocols.has(urlObj.protocol)
+  } catch {
+    return false
+  }
+}
+
+const openExternalURL = (url: string): void => {
+  if (!isAllowedExternalURL(url)) {
+    log.warn('Blocked external URL with unsupported protocol:', url)
+    return
+  }
+
+  shell.openExternal(url).catch((err) => {
+    log.error('Failed to open external URL:', err)
+  })
+}
+
 app.userAgentFallback = getUserAgent()
 
 function createWindow(): void {
@@ -270,7 +292,7 @@ app.on('web-contents-created', (_event, contents) => {
         contents.loadURL(url)
       } else {
         log.info('[WindowOpenHandler] Opening external URL')
-        shell.openExternal(url)
+        openExternalURL(url)
       }
       return { action: 'deny' }
     })
@@ -278,7 +300,7 @@ app.on('web-contents-created', (_event, contents) => {
     contents.on('will-navigate', (event, url) => {
       if (!isChessDotComURL(url)) {
         event.preventDefault()
-        shell.openExternal(url)
+        openExternalURL(url)
       }
     })
 
