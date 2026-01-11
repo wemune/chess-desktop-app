@@ -17,6 +17,10 @@ function navigateForward(contents: WebContents | null): void {
   }
 }
 
+type WebContentsEventName = Parameters<WebContents['on']>[0]
+
+const appCommandEvent = 'app-command' as WebContentsEventName
+
 function handleMouseNavigation(inputEvent: Electron.Event, input: Electron.Input, contents: WebContents | null): boolean {
   if (input.type !== 'mouseDown' && input.type !== 'mouseUp') {
     return false
@@ -59,7 +63,7 @@ export function registerMainWindowShortcuts(window: BrowserWindow): void {
   }
 
   window.on('app-command', handleAppCommand)
-  window.webContents.on('app-command' as any, handleAppCommand)
+  window.webContents.on(appCommandEvent, handleAppCommand)
 
   if (process.env.NODE_ENV !== 'development') {
     return
@@ -91,7 +95,7 @@ export function registerMainWindowShortcuts(window: BrowserWindow): void {
 }
 
 export function registerWebviewShortcuts(contents: WebContents): void {
-  contents.on('app-command' as any, (appEvent: Electron.Event, command: string) => {
+  contents.on(appCommandEvent, (appEvent: Electron.Event, command: string) => {
     if (command === 'browser-backward') {
       appEvent.preventDefault()
       navigateBack(contents)
