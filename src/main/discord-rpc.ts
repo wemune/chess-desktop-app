@@ -220,7 +220,7 @@ function parseGameMode(timeControl: string | undefined): string {
   const match = timeControl.match(/(\d+)/)
   if (!match) return 'Chess'
 
-  const minutes = parseInt(match[1])
+  const minutes = Number.parseInt(match[1])
 
   if (minutes < 3) return 'Bullet'
   if (minutes < 10) return 'Blitz'
