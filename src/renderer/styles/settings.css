@@ -65,6 +65,24 @@
   gap: 4px;
 }
 
+.modal-feedback {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #81b64c;
+  padding: 0 6px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-feedback.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.modal-feedback.hidden {
+  display: none;
+}
+
 .modal-close-btn {
   display: flex;
   align-items: center;

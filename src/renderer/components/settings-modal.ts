@@ -1,4 +1,4 @@
-import { createElement, FileText, X } from 'lucide'
+import { createElement, FileText, Mail, X } from 'lucide'
 import { ThemeId } from '../../shared/themes'
 
 export class SettingsModal {
@@ -14,6 +14,8 @@ export class SettingsModal {
   private discordRpcToggle: HTMLInputElement
   private hideRatingsToggle: HTMLInputElement
   private openLogsBtn: HTMLButtonElement
+  private openFeedbackBtn: HTMLButtonElement
+  private feedbackCopyStatus: HTMLElement
 
   constructor() {
     this.modal = document.getElementById('settings-modal') as HTMLElement
@@ -28,6 +30,8 @@ export class SettingsModal {
     this.discordRpcToggle = document.getElementById('discord-rpc-toggle') as HTMLInputElement
     this.hideRatingsToggle = document.getElementById('hide-ratings-toggle') as HTMLInputElement
     this.openLogsBtn = document.getElementById('open-logs-btn') as HTMLButtonElement
+    this.openFeedbackBtn = document.getElementById('open-feedback-btn') as HTMLButtonElement
+    this.feedbackCopyStatus = document.getElementById('feedback-copy-status') as HTMLElement
 
     this.initializeIcons()
     this.bindEvents()
@@ -37,6 +41,7 @@ export class SettingsModal {
     const iconSize = { width: 16, height: 16, strokeWidth: 2 }
 
     this.openLogsBtn.appendChild(createElement(FileText, iconSize))
+    this.openFeedbackBtn.appendChild(createElement(Mail, iconSize))
     this.closeBtn.appendChild(createElement(X, iconSize))
   }
 
@@ -109,11 +114,35 @@ export class SettingsModal {
       window.electronAPI.logs.openFolder()
     })
 
+    this.openFeedbackBtn.addEventListener('click', async () => {
+      const email = 'contact@chessdesktop.app'
+
+      try {
+        await navigator.clipboard.writeText(email)
+        this.showFeedbackCopied()
+      } catch {
+        return
+      }
+    })
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !this.modal.classList.contains('hidden')) {
         this.close()
       }
     })
+  }
+
+  private showFeedbackCopied(): void {
+    this.feedbackCopyStatus.classList.remove('hidden', 'fade-out')
+
+    setTimeout(() => {
+      this.feedbackCopyStatus.classList.add('fade-out')
+
+      setTimeout(() => {
+        this.feedbackCopyStatus.classList.add('hidden')
+        this.feedbackCopyStatus.classList.remove('fade-out')
+      }, 300)
+    }, 2000)
   }
 
   open(): void {
